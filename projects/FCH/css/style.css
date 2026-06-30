@@ -1,0 +1,16 @@
+#cardPreview {
+    position: fixed;
+    width: 250px;
+    pointer-events: none;
+    border: 1px solid #666;
+    background: white;
+    z-index: 1000;
+}
+
+tr.over2low {
+    background-color: #d8eea2;
+}
+
+input[type="number"] {
+  width: 4ch; /* Fits roughly 6 characters plus the up/down arrows */
+}

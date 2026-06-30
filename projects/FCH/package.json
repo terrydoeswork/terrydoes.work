@@ -1,0 +1,15 @@
+{
+  "name": "terrydoesfch",
+  "version": "1.0.0",
+  "description": "get reliable prices from TCGP",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "TerryDoes",
+  "license": "ISC",
+  "dependencies": {
+    "csv": "^6.6.0",
+    "papaparse": "^5.5.4"
+  }
+}

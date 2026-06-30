@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Do not edit -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/assets/art/favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="/assets/css/style.css" rel="stylesheet" />
+    <script src="/assets/js/layout.js"></script>
+    <!-- Maybe do edit this -->
+    <script type="module" src="js/main.js"></script>
+    <!-- Edit this shit -->
+    <title>TerryDoes.Work</title>
+    <meta content="Collection Price Generator evaluated from TCGP Low" name="description"/>
+    <link href="./css/style.css" rel="stylesheet" />
+    
+    <!-- Additional Packages-->
+    <script src="./node_modules/papaparse/papaparse.min.js"></script>
+    <script type="module" src="js/api.js"></script>
+    <!-- <link rel="stylesheet" href="https://mtgify.org/dist/autocard.css" />
+    <script>
+        MTGIFY_CONFIG = {
+            linkSource: "scryfall",
+            imgSource: "scryfall",
+            ignoreCase: true
+        }
+    </script>
+    <script src="https://mtgify.org/dist/autocard.js"></script> -->
+
+
+</head>
+<body>
+    <a href="#content" id="skip-to-content-link">Skip to content</a>
+
+    <div class="layout">
+        <main id="content">
+            <noscript>Please enable JavaScript to view this website!</noscript>
+            <section>
+
+                <h1>TCGPlayer Collection Trackers</h1>
+                <p>
+                    This project is to serve a function that the TCGPlayer App currently lacks. Display any collection as TCGP Low. I do not know why it is not, because it will display Market Price; and any storefront on TCGPlayer knows that isnt a good metric to go off of. 
+                </p>
+                <form id="myForm">
+                    <input type="file" id="csvInput">
+                    <label for="digitInputPrune">Prune Cards Lower than: </label>
+                    <input type="number" min=0 max=9 id="digitInputPrune"> 
+                    <label for="trimLowRarities">Trim C/U's</label>
+                    <input type="checkbox" id="trimLowRarities">
+                    <button type="submit" id="submitButton">Submit</button>
+                </form>
+
+                <table id="tableDisplay">
+                </table>
+                <span id="statsBlock">
+                    <p>total price (tcglow)</p><p id="totalPrice"></p>
+                    <p>total cards</p><p id="totalCards"></p>
+                </span>
+
+            </section>
+        </main>
+    </div>
+</body>
+</html>
+
+
