@@ -24,12 +24,14 @@ export class Card {
         this.priceLow = undefined;
         this.priceMarket = undefined;
         this.setName = undefined;
+        this.setCode = undefined;
         this.notes = this.#initNotes(cardJSON);
         this.count = this.#initQuantity(cardJSON);
         this.rarity = this.#initRarity(cardJSON);
         this.success = true;
 
         this.tcgpid = this.#inittcgpID(cardJSON);
+        this.collectorNumber = this.#initCollectorNumber(cardJSON);
     }
 
     /**
@@ -101,19 +103,19 @@ export class Card {
         switch(this.rarity){
             case ENUM.CARD_RARITY.COMMON:
             default:
-                return "Common";
+                return 'Common';
             case ENUM.CARD_RARITY.UNCOMMON:
-                return "Uncommon";
+                return 'Uncommon';
             case ENUM.CARD_RARITY.RARE:
-                return "Rare";
+                return 'Rare';
             case ENUM.CARD_RARITY.MYTHIC:
-                return "Mythic";
+                return 'Mythic';
             case ENUM.CARD_RARITY.LAND:
-                return "Land";
+                return 'Land';
             case ENUM.CARD_RARITY.TOKEN:
-                return "Token";
+                return 'Token';
             case ENUM.CARD_RARITY.PROMO:
-                return "Promo";
+                return 'Promo';
             
         }
     }
@@ -121,10 +123,10 @@ export class Card {
     getFinishString() {
         switch(this.finish) {
             case ENUM.CARD_FINISH.FOIL:
-                return "Foil";
+                return 'Foil';
             case ENUM.CARD_FINISH.NORMAL:
             default:
-                return "Normal";
+                return 'Normal';
         
         
         }
@@ -138,31 +140,31 @@ export class Card {
     }
 
     #initName(data) {
-        if (data["Product Name"] != null) return data["Product Name"];
+        if (data['Product Name'] != null) return data['Product Name'];
     }
     
     #initProductID(data) {
-        if (data["Product ID"] != null) return data["Product ID"];
+        if (data['Product ID'] != null) return data['Product ID'];
     }
 
     #initCondition(data) {
-        let conditionCased = data["Condition"].toUpperCase();
+        let conditionCased = data['Condition'].toUpperCase();
         switch(conditionCased) {
-            case "NM":
-            case "NEAR MINT":
+            case 'NM':
+            case 'NEAR MINT':
                 return ENUM.CARD_CONDITION.NEAR_MINT;
-            case "LP":
-            case "LIGHTLY PLAYED":
+            case 'LP':
+            case 'LIGHTLY PLAYED':
                 return ENUM.CARD_CONDITION.LIGHTLY_PLAYED;
-            case "MP":
-            case "MODERATELY PLAYED":
+            case 'MP':
+            case 'MODERATELY PLAYED':
                 return ENUM.CARD_CONDITION.MODERATELY_PLAYED;
-            case "HP":
-            case "HEAVILY PLAYED":
+            case 'HP':
+            case 'HEAVILY PLAYED':
                 return ENUM.CARD_CONDITION.HEAVILY_PLAYED;
-            case "DM":
-            case "DMG":
-            case "DAMAGED":
+            case 'DM':
+            case 'DMG':
+            case 'DAMAGED':
                 return ENUM.CARD_CONDITION.DAMAGED;
             default:
                 console.warn(`Could not find condition for ${this.name} (${this.productID}), assuming NM.`)
@@ -172,11 +174,11 @@ export class Card {
 
     #initFinish(data) {
         
-        let finishCase = data["Printing"].toUpperCase();
+        let finishCase = data['Printing'].toUpperCase();
         switch(finishCase) {
-            case "NORMAL":
+            case 'NORMAL':
                 return ENUM.CARD_FINISH.NORMAL;
-            case "FOIL":
+            case 'FOIL':
                 return ENUM.CARD_FINISH.FOIL;
             default:
                 console.warn(`Could not find finish for ${this.name} (${this.productID}), assuming Normal.`);
@@ -187,48 +189,54 @@ export class Card {
 
 
     #initTcgpImageLink(data) {
-        if (data["Photo URL"] != null) return data["Photo URL"];
+        if (data['Photo URL'] != null) return data['Photo URL'];
     }
 
     #initNotes(data) {
-        if (data["Notes"] != null) {
-            console.warn("this shouldnt show up!" + data["Notes"]);
-            return data["Notes"];
-        } else return "";
+        if (data['Notes'] != null) {
+            console.warn('this shouldnt show up!' + data['Notes']);
+            return data['Notes'];
+        } else return '';
     }
     
     #inittcgpID(data) {
-        if (data["TCGplayer Id"] != null) {
-            return data["TCGplayer Id"];
+        if (data['TCGplayer Id'] != null) {
+            return data['TCGplayer Id'];
         }
     }
 
     #initQuantity(data) {
-        if (data["Add to Quantity"]) {
-            return data["Add to Quantity"];
+        if (data['Add to Quantity']) {
+            return data['Add to Quantity'];
         }
     }
 
     #initRarity(data) {
-        let rarityCase = data["Rarity"].toUpperCase();
+        let rarityCase = data['Rarity'].toUpperCase();
         
         switch(rarityCase) {
-            case "COMMON":
+            case 'COMMON':
                 return ENUM.CARD_RARITY.COMMON;
-            case "UNCOMMON":
+            case 'UNCOMMON':
                 return ENUM.CARD_RARITY.UNCOMMON;
-            case "RARE":
+            case 'RARE':
                 return ENUM.CARD_RARITY.RARE;
-            case "MYTHIC":
+            case 'MYTHIC':
                 return ENUM.CARD_RARITY.MYTHIC;
-            case "PROMO":
+            case 'PROMO':
                 return ENUM.CARD_RARITY.PROMO;
-            case "LAND":
+            case 'LAND':
                 return ENUM.CARD_RARITY.LAND;
-            case "TOKEN":
+            case 'TOKEN':
                 return ENUM.CARD_RARITY.TOKEN;
         }
 
+    }
+
+    #initCollectorNumber(data) {
+        if (data['Number']) {
+            return data['Number'];
+        }
     }
 }
 

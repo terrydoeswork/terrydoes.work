@@ -7,10 +7,62 @@
     z-index: 1000;
 }
 
-tr.over2low {
-    background-color: #d8eea2;
+.zebra-table tbody tr:nth-child(even) {
+    background-color: #183434;
+    color: white;
 }
 
-input[type="number"] {
-  width: 4ch; /* Fits roughly 6 characters plus the up/down arrows */
+.zebra-table tbody tr:nth-child(odd) {
+    background-color: #152b2b;
+    color: white;
+}
+
+.zebra-table tbody tr:hover {
+    background-color: #53b570;
+    color:black
+}
+
+.table-container {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding: 0 20px;
+}
+
+.form-col {
+    flex-direction: column!important;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.center-just-space {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;    
+
+}
+
+#exportButtonsList {
+    display: none;
+}
+.flexVerticalOnMobile {
+    flex-direction: column!important;
+}
+
+@media (min-width: 850px) {
+    .flexVerticalOnMobile {
+    flex-direction: row!important; 
+  }
+}
+
+.flexHorzOnMobile {
+    flex-direction: row!important;
+}
+
+@media (min-width: 850px) {
+    .flexHorzOnMobile {
+        flex-direction: column!important;
+  }
 }

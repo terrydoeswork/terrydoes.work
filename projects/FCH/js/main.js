@@ -1,18 +1,31 @@
 import * as ENUM from './enums.js'
 import { Card } from './card.js';
-import * as api from './api.js'
+import * as FCH from './fch.js';
+import * as API from '../../../assets/js/terrydoeslibrary.js';
 
-const myForm = document.getElementById('myForm');
-const fileInput = document.getElementById('csvInput');
+const importTableList = document.getElementById('importTableList');
+const exportButtonsList = document.getElementById('exportButtonsList')
+const fileInput = document.getElementById('fileInput');
 const trimLowRaritiesInput = document.getElementById('trimLowRarities');
 const digitInputPrune = document.getElementById('digitInputPrune')
 const collectionTable = document.getElementById('tableDisplay');
 const cardPreview = document.createElement('img');
 const submitButton = document.getElementById('submitButton');
+
+const inputPriceAdjuster = document.getElementById('inputPriceAdjuster');
+
+const statTotalPrice = document.getElementById('statsTotalPrice');
+const statTotalCards = document.getElementById('statsTotalCards');
+const statsPercentagePrice = document.getElementById('statsPercentagePrice');
+
 document.body.appendChild(cardPreview);
 cardPreview.id = 'cardPreview';
+cardPreview.classList.add('w3-card');
 
-myForm.addEventListener('submit', handleSubmit);
+
+
+importTableList.addEventListener('submit', handleSubmit);
+inputPriceAdjuster.addEventListener('input', handleRangeQuery);
 
 
 /**
@@ -23,7 +36,7 @@ async function handleSubmit(event) {
     // Prevent the default browser page reload behavior
     event.preventDefault(); 
     submitButton.disabled = true;
-    submitButton.innerText = "Submitting...";
+    submitButton.innerText = 'Submitting...';
 
     const minPriceThreshold = digitInputPrune.value;
     const isTrimmingRarity = trimLowRaritiesInput.checked;
@@ -33,6 +46,8 @@ async function handleSubmit(event) {
     
     if (CSVFile.length == 0) {
         console.warn('nothing uploaded :(')
+        submitButton.disabled = false;
+        submitButton.innerText = 'Submit';
         return;
     }
 
@@ -41,10 +56,12 @@ async function handleSubmit(event) {
     // check if file is csv or txt
     if (file.type != 'text/csv' && file.type != 'text/txt') {
         console.warn(`Expected a text/csv or text/txt, got ${file.type} instead!`);
+        submitButton.disabled = false;
+        submitButton.innerText = 'Submit';
         return;
     }
 
-    const data = await api.parseCSV(file)
+    const data = await FCH.parseCSV(file)
     
     const cardArray = [];
     const cardArrayDiscard = [];
@@ -78,75 +95,90 @@ async function handleSubmit(event) {
 
     }
     
-    createTableFromCollection(cardArray);
     
-    let btn = api.createdButtonElement('Download Active List', function() {
-        api.downloadObjAsJSONFile(cardArray, `collection_list_(${new Date().toLocaleDateString()})`);
-    })
-    let btn2 = api.createdButtonElement('Download Discarded List', function() {
-        api.downloadObjAsJSONFile(cardArrayDiscard, `discarded_collection_list_(${new Date().toLocaleDateString()})`);
-    })
-    let btn3 = api.createdButtonElement('Export as TCGPlayer/CSV', function() {
-        api.downloadCSV(api.convertCardArrayToTCGPlayerList, `TCGPlayer List ${new Date().toLocaleDateString()}`)
+    constructTable(cardArray);
+    updateStatBlock(cardArray);
+    
+    let btn = document.getElementById('exportButtonAsJSON');
+    btn.addEventListener('click', function() {
+        FCH.downloadObjAsJSONFile(cardArray, `Collection(DevJSON)`);
     })
 
-    myForm.appendChild(btn);
-    myForm.appendChild(btn2);
-    myForm.appendChild(btn3);
+    let btn2 = document.getElementById('exportButtonAsText');
+    btn2.addEventListener('click', function() {
+        FCH.downloadTXT(FCH.convertCardArrayToTextList(cardArray), 'Collection(Text)')
+    });
+    
+    let btn3 = document.getElementById('exportButtonAsTCGPlayer');
+    btn3.addEventListener('click', function() {
+        FCH.downloadCSV(FCH.convertCardArrayToTCGPlayerList(cardArray), 'Collection(TCGPlayerCollection)');
+    });
+
+    exportButtonsList.style.display = 'block';
 
     // allow resubmitting 
     submitButton.disabled = false;
-    submitButton.innerText = "Submit";
+    submitButton.innerText = 'Submit';
 }
 
-
-function createTableFromCollection(array) {
-
-    const table = document.createElement('table');
-    
-    let totalPrice = 0
-    
-    const columns = [
+function constructTable(array) {
+    const columns = [  
         {
             header: 'Card',
+            headerClasses: [],
             render(card, cell) {
-                let foil = (card.isFoil()) ? '🌈' : '⬛';
 
-                let text = `${card.name} ${foil}`;
+                let text = `${card.name}`;
                 const span = document.createElement('span');
-                const preview = document.getElementById('cardPreview'); // Im getting dejavu
-
                 span.textContent = text;
 
-                span.addEventListener('mouseenter', () => {
-                    preview.src = card.imageLink;
-                    preview.hidden = false;
+                cell.addEventListener('mouseenter', () => {
+                   cardPreview.src = card.imageLink;
+                   cardPreview.hidden = false;
                 });
 
-                span.addEventListener('mousemove', (e) => {
-                    preview.style.left = `${e.clientX + 20}px`;
-                    preview.style.top = `${e.clientY + 20}px`;
+                cell.addEventListener('mousemove', (e) => {
+                   cardPreview.style.left = `${e.clientX + 20}px`;
+                   cardPreview.style.top = `${e.clientY + 20}px`;
                 });
 
-                span.addEventListener('mouseleave', () => {
-                    preview.hidden = true;
+                cell.addEventListener('mouseleave', () => {
+                   cardPreview.hidden = true;
                 });
 
                 cell.appendChild(span)
             }
         },
         {
+            header: 'Finish',
+            headerClasses: ['w3-center'],
+            render(card, cell) {
+                const span = document.createElement('span');
+                const foil = (card.isFoil()) ? '🌈' : '⬛';
+
+                span.textContent = foil;
+
+                cell.classList.add('w3-center');
+                cell.width = 'min-content';
+                cell.appendChild(span);
+
+            }
+        },
+        {
             header: 'Condition',
+            headerClasses: ['w3-center'],
             render(card, cell) {
                 const span = document.createElement('span');
 
                 span.textContent = card.getCondition();
 
+                cell.classList.add('w3-center');
                 cell.appendChild(span);
             }
         },
         {
             header: 'Low Price',
+            headerClasses: ['w3-center'],
             render(card, cell) {
                 const span = document.createElement('span');
 
@@ -156,47 +188,189 @@ function createTableFromCollection(array) {
                     span.textContent = `$???`
                 }
 
+                cell.classList.add('w3-right-align');
                 cell.appendChild(span)
             }
         },
         {
             header: 'Count',
+            headerClasses: ['w3-center'],
             render(card, cell) {
                 const span = document.createElement('span');
                 span.textContent = card.count;
-
+                
+                cell.classList.add('w3-right-align');
                 cell.appendChild(span);
             }
         }
     ];
 
-    const headerRow = table.insertRow();
-    
-    columns.forEach(col => {
-        const th = document.createElement('th');
-        th.textContent = col.header;
-        headerRow.appendChild(th);
-    });
-
-    array.forEach(card => {
-    
-        const row = table.insertRow();
-        columns.forEach(col => {
-            const cell = row.insertCell();
-            col.render(card, cell);
-
-        })
-
-        totalPrice += Number(card.priceLow);
-    });
-
-    collectionTable.appendChild(table);
-
-    let totalPriceBlock = document.getElementById('totalPrice');
-        
-    totalPriceBlock.innerText = totalPrice;
+    API.createTable(columns, array, collectionTable);
 
 }
+
+function updateStatBlock(cardArray) {
+    
+    let totalCards = cardArray.length;
+    let totalPrice = FCH.getTotalPrice(cardArray);
+
+    statTotalCards.textContent = totalCards;
+    statTotalPrice.textContent = '$' + totalPrice;
+    
+}
+
+function handleRangeQuery(event) {
+
+    let percent = inputPriceAdjuster.labels[0];
+    let dd = inputPriceAdjuster.parentElement.nextElementSibling;
+
+    // statTotalPrice.dd
+
+    percent.textContent = inputPriceAdjuster.value + '%';
+    dd.innerHTML = '$' + (API.moneyRound(API.convertStringToNumber(statTotalPrice.textContent) * API.convertStringToNumber(percent.textContent)));
+    
+}
+
+// function createTableFromCollection(array) {
+    
+//     let totalPrice = 0
+    
+//     const columns = [  
+//         {
+//             header: 'Card',
+//             headerClasses: [],
+//             render(card, cell) {
+
+//                 let text = `${card.name}`;
+//                 const span = document.createElement('span');
+//                 span.textContent = text;
+
+//                 // cell.addEventListener('mouseenter', () => {
+//                 //    cardPreview.src = card.imageLink;
+//                 //    cardPreview.hidden = false;
+//                 // });
+
+//                 // cell.addEventListener('mousemove', (e) => {
+//                 //    cardPreview.style.left = `${e.clientX + 20}px`;
+//                 //    cardPreview.style.top = `${e.clientY + 20}px`;
+//                 // });
+
+//                 // cell.addEventListener('mouseleave', () => {
+//                 //    cardPreview.hidden = true;
+//                 // });
+
+//                 cell.appendChild(span)
+//             }
+//         },
+//         {
+//             header: 'Finish',
+//             headerClasses: ['w3-center'],
+//             render(card, cell) {
+//                 const span = document.createElement('span');
+//                 const foil = (card.isFoil()) ? '🌈' : '⬛';
+
+//                 span.textContent = foil;
+
+//                 cell.classList.add('w3-center');
+//                 cell.appendChild(span);
+//             }
+//         },
+//         {
+//             header: 'Condition',
+//             headerClasses: ['w3-center'],
+//             render(card, cell) {
+//                 const span = document.createElement('span');
+
+//                 span.textContent = card.getCondition();
+
+//                 cell.classList.add('w3-center');
+//                 cell.appendChild(span);
+//             }
+//         },
+//         {
+//             header: 'Low Price',
+//             headerClasses: ['w3-center'],
+//             render(card, cell) {
+//                 const span = document.createElement('span');
+
+//                 if(card.success) {
+//                     span.textContent = `$${card.priceLow}`;
+//                 } else {
+//                     span.textContent = `$???`
+//                 }
+
+//                 cell.classList.add('w3-right-align');
+//                 cell.appendChild(span)
+//             }
+//         },
+//         {
+//             header: 'Count',
+//             headerClasses: ['w3-center'],
+//             render(card, cell) {
+//                 const span = document.createElement('span');
+//                 span.textContent = card.count;
+                
+//                 cell.classList.add('w3-right-align');
+//                 cell.appendChild(span);
+//             }
+//         }
+//     ];
+
+//     const headerRow = collectionTable.createTHead();
+    
+//     columns.forEach((col, index) => {
+        
+//         let a = true;
+//         const th = document.createElement('th');
+//         th.textContent = col.header;
+
+//         th.addEventListener('click', function() {
+//             API.sortTable(collectionTable, index, a);
+//             a = !a;
+//         });
+        
+
+//         col.headerClasses.forEach(c => {
+//             th.classList.add(c);
+//         });
+
+//         headerRow.appendChild(th);
+
+//     });
+
+//     array.forEach(card => {
+    
+//         const row = collectionTable.insertRow();
+//         columns.forEach(col => {
+//             const cell = row.insertCell();
+//             col.render(card, cell);
+
+//         })
+
+//         totalPrice += Number(card.priceLow);
+
+        
+//         row.addEventListener('mouseenter', () => {
+//             cardPreview.src = card.imageLink;
+//             cardPreview.hidden = false;
+//         });
+
+//         row.addEventListener('mousemove', (e) => {
+
+//             cardPreview.style.left = `${e.clientX + 20}px`;
+//             cardPreview.style.top = `${e.clientY + 20}px`;
+//         });
+
+//         row.addEventListener('mouseleave', () => {
+//             cardPreview.hidden = true;
+//         });
+//     });
+
+//     let totalPriceBlock = document.getElementById('totalPrice');
+        
+//     totalPriceBlock.innerText = API.moneyRound(totalPrice);
+
+// }
 
 
 
@@ -247,21 +421,3 @@ async function updateCardData(card) {
     
     return card;
 }
-
-
-// function downloadAsJSONFile(obj, filename) {
-//     const jsonString = JSON.stringify(obj, null, 4);
-    
-//     const blob = new Blob([jsonString], { type: 'application/json' });
-
-//     const url = URL.createObjectURL(blob);
-    
-//     const link = document.createElement('a');
-//     link.href = url;
-//     link.download = filename;
-//     document.body.appendChild(link);
-//     link.click();
-//     document.body.removeChild(link);
-//     URL.revokeObjectURL(url);
-// }
-

@@ -1,54 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <!-- Maybe do edit this -->
-    <script type="module" src="js/main.js"></script>
+    <!-- Website Details -->
     <title>TerryDoes.Work</title>
-    <meta content="Collection Price Generator evaluated from TCGP Low" name="description"/>
+    <meta content="Collection Price Generator evaluated from TCGP Low" name="description" />
+
+    <!-- Packages and Libraries-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.js"
+        integrity="sha512-M0cjXJTonbWEdLI3HJIoJSQBb9980RWmOCk+tvWkhgFrAZqSSIg1+1Db/vDu7Qk9W3L90gBynve17PYvarjfQA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="module" src="js/fch.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+    
+    <!-- Project Local Files -->
+    <script type="module" src="js/main.js"></script>
     <link href="./css/style.css" rel="stylesheet" />
-    <!-- Additional Packages-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.js" integrity="sha512-M0cjXJTonbWEdLI3HJIoJSQBb9980RWmOCk+tvWkhgFrAZqSSIg1+1Db/vDu7Qk9W3L90gBynve17PYvarjfQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    <script type="module" src="js/api.js"></script>
-    <!-- Do not edit -->
+
+    <!-- Global References -->
+    <link href="/assets/art/favicon.ico" rel="icon" type="image/x-icon" />
+    <!-- <link href="/assets/css/style.css" rel="stylesheet" /> -->
+    <!-- <script src="/assets/js/layout.js"></script> -->
+    <script type="module" src="/assets/js/terrydoeslibrary.js"></script>
+
+    <!-- Misc do not Touch -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/assets/art/favicon.ico" rel="icon" type="image/x-icon" />
-    <link href="/assets/css/style.css" rel="stylesheet" />
-    <script src="/assets/js/layout.js"></script>
-    
 
 </head>
-<body>
-    <a href="#content" id="skip-to-content-link">Skip to content</a>
 
-    <div class="layout">
+<body class="w3-black">
+    <!-- <a class="w3-button w3-red w3-card skip-link" href="#content" id="skip-to-content-link">Skip to content</a> -->
+
+    <div class="layout w3-container w3-asphalt">
         <main id="content">
             <noscript>Please enable JavaScript to view this website!</noscript>
-            <section>
+            <section class="">
+                <div class="w3-container">
+                    <h1 class="w3-header">TCGPlayer Collection Trackers</h1>
+                    <p><b>v1.1</b> working on UI! Updated export and most other functions in project.</p>
+                    <p>
+                        This project is to serve a function that the TCGPlayer App currently lacks. Display any
+                        collection as TCGP Low. I do not know why it is not, because it will display Market Price; and
+                        any storefront on TCGPlayer knows that isnt a good metric to go off of.
+                    </p>
+                </div>
+                <div class="w3-container w3-flex flexVerticalOnMobile">
+                    <form class=" w3-flex w3-container w3-border" id="importTableList" style="flex-direction: column;">
+                        <h2 class="h3-header w3-center">Import</h2>
+                        <div class="w3-center w3-margin-bottom">
+                            <label for="fileInput" class="w3-button w3-crimson w3-hover-deep-purple">
+                                Upload File
+                            </label>
+                            <input  type="file" id="fileInput"/>
+                        </div>
+                        <div class="center-just-space w3-margin-bottom">
+                            <label for="digitInputPrune">Trim Cards Priced Lower than:</label>
+                            <input type="number" min=0 max=9 id="digitInputPrune" class=""> 
+                        </div>
+                        <div class="center-just-space w3-margin-bottom">
+                            <label for="trimLowRarities">Trim C/U's</label> 
+                            <input type="checkbox" id="trimLowRarities" class="w3-check">
+                        </div>
+                        <button class="w3-button w3-green w3-hover-deep-purple w3-margin-bottom" type="submit"
+                            id="submitButton">Submit</button>
+                    </form>
+                    <div class="w3-flex w3-container w3-border w3-padding form-col">
+                        <h2 class="h3-header w3-center">Collection Information</h2>
+                        <dl class="center-just-space">
+                            <dt>Total Cards</dt>
+                            <dd id="statsTotalCards">0</dd>
+                        </dl>
+                        <dl class="center-just-space">
+                            <dt>Total at TCGPLow</dt>
+                            <dd id="statsTotalPrice">$0.00</dd>
+                        </dl>
 
-                <h1>TCGPlayer Collection Trackers</h1>
-                <p>
-                    This project is to serve a function that the TCGPlayer App currently lacks. Display any collection as TCGP Low. I do not know why it is not, because it will display Market Price; and any storefront on TCGPlayer knows that isnt a good metric to go off of. 
-                </p>
-                <form id="myForm">
-                    <input type="file" id="csvInput">
-                    <label for="digitInputPrune">Prune Cards Lower than: </label>
-                    <input type="number" min=0 max=9 id="digitInputPrune"> 
-                    <label for="trimLowRarities">Trim C/U's</label>
-                    <input type="checkbox" id="trimLowRarities">
-                    <button type="submit" id="submitButton">Submit</button>
-                </form>
-
-                <table id="tableDisplay">
-                </table>
-                <span id="statsBlock">
-                    <p>total price (tcglow)</p><p id="totalPrice"></p>
-                    <p>total cards</p><p id="totalCards"></p>
-                </span>
+                        <dl class="center-just-space">
+                            <form>
+                                <input type="range" min="0" max="100" step="5" id="inputPriceAdjuster">
+                                <label for="inputPriceAdjuster">65%</label>
+                            </form>
+                            <dd id="statsPercentagePrice">$---</dd>
+                        </dl>
+                        
+                    </div>
+                    <div class=" w3-container w3-border" id="exportButtonsList">
+                        <h2 class="h3-header w3-center ">Export</h2>
+                        <div class="w3-flex flexHorzOnMobile">
+                            <button class="w3-button w3-indigo w3-hover-deep-purple" type="submit" id="exportButtonAsTCGPlayer" >TCGPlayer Collection</button>
+                            <button class="w3-button w3-indigo w3-hover-deep-purple" type="submit" id="exportButtonAsText" >Text List</button>
+                            <button class="w3-button w3-indigo w3-hover-deep-purple" type="submit" id="exportButtonAsJSON" >JSON (devmode)</button>
+                
+                        </div>
+                    </div>
+                </div>
+                <div class="w3-container" style="overflow-x: auto;">
+                    <table class="w3-table w3-bordered zebra-table" id="tableDisplay">
+                    </table>
+                </div>
 
             </section>
         </main>
     </div>
 </body>
+
 </html>
-
-
