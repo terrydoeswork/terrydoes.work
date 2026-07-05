@@ -38,7 +38,7 @@
             <section class="">
                 <div class="w3-container">
                     <h1 class="w3-header">TCGPlayer Collection Trackers</h1>
-                    <p><b>v1.1</b> working on UI! Updated export and most other functions in project.</p>
+                    <p><b>v1.2</b> Mostly jsut refactoring. I feel very productive. There are still bugs, but Im proud of this.</p>
                     <p>
                         This project is to serve a function that the TCGPlayer App currently lacks. Display any
                         collection as TCGP Low. I do not know why it is not, because it will display Market Price; and
@@ -46,7 +46,7 @@
                     </p>
                 </div>
                 <div class="w3-container w3-flex flexVerticalOnMobile">
-                    <form class=" w3-flex w3-container w3-border" id="importTableList" style="flex-direction: column;">
+                    <form class=" w3-flex w3-container w3-border" id="importSettingsForm" style="flex-direction: column;">
                         <h2 class="h3-header w3-center">Import</h2>
                         <div class="w3-center w3-margin-bottom">
                             <label for="fileInput" class="w3-button w3-crimson w3-hover-deep-purple">
@@ -78,19 +78,19 @@
 
                         <dl class="center-just-space">
                             <form>
-                                <input type="range" min="0" max="100" step="5" id="inputPriceAdjuster">
-                                <label for="inputPriceAdjuster">65%</label>
+                                <input type="range" min="0" max="100" step="5" id="statsPercentageRange">
+                                <label for="statsPercentageRange">65%</label>
                             </form>
                             <dd id="statsPercentagePrice">$---</dd>
                         </dl>
                         
                     </div>
-                    <div class=" w3-container w3-border" id="exportButtonsList">
+                    <div class=" w3-container w3-border" id="exportWindow">
                         <h2 class="h3-header w3-center ">Export</h2>
                         <div class="w3-flex flexHorzOnMobile">
-                            <button class="w3-button w3-indigo w3-hover-deep-purple" type="submit" id="exportButtonAsTCGPlayer" >TCGPlayer Collection</button>
-                            <button class="w3-button w3-indigo w3-hover-deep-purple" type="submit" id="exportButtonAsText" >Text List</button>
-                            <button class="w3-button w3-indigo w3-hover-deep-purple" type="submit" id="exportButtonAsJSON" >JSON (devmode)</button>
+                            <button class="w3-button w3-indigo w3-hover-deep-purple" type="submit" id="exportAsTCGPlayer" >TCGPlayer Collection</button>
+                            <button class="w3-button w3-indigo w3-hover-deep-purple" type="submit" id="exportAsText" >Text List</button>
+                            <button class="w3-button w3-indigo w3-hover-deep-purple" type="submit" id="exportAsJSON" >JSON (devmode)</button>
                 
                         </div>
                     </div>

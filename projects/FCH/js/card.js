@@ -32,6 +32,7 @@ export class Card {
 
         this.tcgpid = this.#inittcgpID(cardJSON);
         this.collectorNumber = this.#initCollectorNumber(cardJSON);
+        this.error = undefined;
     }
 
     /**

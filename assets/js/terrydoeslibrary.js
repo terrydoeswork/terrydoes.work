@@ -108,7 +108,7 @@ export function convertStringToNumber(str) {
     let newStr = str.toString()
 
     if (newStr.includes('%')) return (parseFloat(newStr.replace(/[%\$,]/g, "")) / 100);
-
+    
 
     return parseFloat(newStr.replace(/[\$,]/g, ""));
 }

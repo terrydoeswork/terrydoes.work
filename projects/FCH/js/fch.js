@@ -108,12 +108,23 @@ export function parseCSV(file) {
     });
 }
 
+export function parseTXT(file) {
+    return new Promise((resolve, reject) => {
+        Papa.parse(file, {
+            header: true,
+            skipEmptyLines: true,
+            complete: results => resolve(results.data),
+            error: reject
+        });
+    });
+}
+
 /**
  * 
  * @param {Card[]} cardArray -
  * @returns {number}
  */
-export function getTotalPrice(cardArray) {
+export function getTotalPriceFromCardArray(cardArray) {
     let total = 0;
     cardArray.forEach(card => {
         total += API.convertStringToNumber(card.priceLow);
