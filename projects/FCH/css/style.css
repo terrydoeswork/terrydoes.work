@@ -45,7 +45,7 @@ input[type="file"] {
 }
 
 #exportButtonsList {
-    display: none;
+
 }
 .flexVerticalOnMobile {
     flex-direction: column!important;
