@@ -46,24 +46,24 @@
                     </p>
                 </div>
                 <div class="w3-container w3-flex flexVerticalOnMobile">
-                    <form class=" w3-flex w3-container w3-border" id="importSettingsForm" style="flex-direction: column;">
+                    <form class=" w3-flex w3-container w3-border" id="importWindow" style="flex-direction: column;">
                         <h2 class="h3-header w3-center">Import</h2>
                         <div class="w3-center w3-margin-bottom">
                             <label for="fileInput" class="w3-button w3-crimson w3-hover-deep-purple">
                                 Upload File
                             </label>
-                            <input  type="file" id="fileInput"/>
+                            <input  type="file" id="importInputFile"/>
                         </div>
                         <div class="center-just-space w3-margin-bottom">
-                            <label for="digitInputPrune">Trim Cards Priced Lower than:</label>
-                            <input type="number" min=0 max=9 id="digitInputPrune" class=""> 
+                            <label for="importInputNumber">Trim Cards Priced Lower than:</label>
+                            <input type="number" min=0 max=9 id="importInputNumber" class=""> 
                         </div>
                         <div class="center-just-space w3-margin-bottom">
-                            <label for="trimLowRarities">Trim C/U's</label> 
-                            <input type="checkbox" id="trimLowRarities" class="w3-check">
+                            <label for="importInputCheckTrimBulk">Trim C/U's</label> 
+                            <input type="checkbox" id="importInputCheckTrimBulk" class="w3-check">
                         </div>
                         <button class="w3-button w3-green w3-hover-deep-purple w3-margin-bottom" type="submit"
-                            id="submitButton">Submit</button>
+                            id="importInputSubmit">Submit</button>
                     </form>
                     <div class="w3-flex w3-container w3-border w3-padding form-col">
                         <h2 class="h3-header w3-center">Collection Information</h2>
@@ -78,8 +78,8 @@
 
                         <dl class="center-just-space">
                             <form>
-                                <input type="range" min="0" max="100" step="5" id="statsPercentageRange">
-                                <label for="statsPercentageRange">65%</label>
+                                <input type="range" min="0" max="100" step="5" id="statsInputRangePercentage">
+                                <label for="statsInputRangePercentage">65%</label>
                             </form>
                             <dd id="statsPercentagePrice">$---</dd>
                         </dl>

@@ -21,7 +21,7 @@ function init() {
     initializeExport();
     // event listeners
     
-    DOM.import.importSettingsForm.addEventListener('submit', handleSubmit);
+    DOM.import.importWindow.addEventListener('submit', handleSubmit);
     
 }
 

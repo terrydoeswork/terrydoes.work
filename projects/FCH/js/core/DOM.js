@@ -1,11 +1,11 @@
 
 export const DOM = {
     import: {
-        fileUpload: document.getElementById('fileInput'),
-        submitButton: document.getElementById('submitButton'),
-        trimLowRaritiesButton: document.getElementById('trimLowRarities'),
-        priceThreshold: document.getElementById('digitInputPrune'),
-        importSettingsForm: document.getElementById('importSettingsForm')
+        fileUpload: document.getElementById('importInputFile'),
+        submitButton: document.getElementById('importInputSubmit'),
+        trimBulk: document.getElementById('importInputCheckTrimBulk'),
+        priceThreshold: document.getElementById('importInputNumber'),
+        window: document.getElementById('importWindow')
     },
     export: {
         window: document.getElementById('exportWindow'),
@@ -16,7 +16,7 @@ export const DOM = {
     stats: {
         totalCards: document.getElementById('statsTotalCards'),
         totalPrice: document.getElementById('statsTotalPrice'),
-        percentageRange: document.getElementById('statsPercentageRange'),
+        percentageRange: document.getElementById('statsInputRangePercentage'),
         percentagePrice: document.getElementById('statsPercentagePrice')
     },
     table: document.getElementById('tableDisplay')
