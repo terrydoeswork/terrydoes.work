@@ -1,4 +1,4 @@
-import { moneyRound } from "../../../../assets/js/terrydoeslibrary.js";
+import { moneyRound } from "../../../../js/terrydoeslibrary.js";
 import { DOM } from "../core/DOM.js";
 
 let STATS = {
@@ -15,7 +15,10 @@ export function initializeStats() {
  * 
  * @param {STATS} stats 
  */
-export function updateStats(stats=null) {
+export function updateStats(cards) {
+    
+    let stats = calculateStats(cards);
+    
     if(stats) Object.assign(STATS, stats);
     renderStats();
 }
@@ -52,4 +55,17 @@ function renderPercentPrice() {
     DOM.stats.percentageRange.labels[0].textContent = Math.floor(STATS.percentage*100) + '%';
 
     DOM.stats.percentagePrice.textContent = '$' + moneyRound(STATS.percentage * STATS.totalPrice);
+}
+
+function calculateStats(cards) {
+    let totalCards = cards.length;
+    let totalPrice = 0;
+    cards.forEach(card => {
+        totalPrice += parseFloat(card.priceLow);
+    });
+
+    return {
+        totalCards: totalCards,
+        totalPrice: moneyRound(totalPrice)
+    }
 }

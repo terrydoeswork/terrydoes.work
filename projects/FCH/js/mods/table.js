@@ -1,6 +1,7 @@
 import { hidePreview, movePreview, showPreview } from './preview.js';
-import { createTable } from '../../../../assets/js/terrydoeslibrary.js';
+import { createTable } from '../../../../js/terrydoeslibrary.js';
 import { DOM } from '../core/DOM.js';
+import { FINISH_EMOJI } from '../enums.js';
 
 export const TABLE_COLUMNS = [  
     {
@@ -53,7 +54,7 @@ function renderCardName(card, cell) {
 
 function renderCardFinish(card, cell) {
     const span = document.createElement('span');
-    const foil = (card.isFoil()) ? '🌈' : '⬛';
+    const foil = (FINISH_EMOJI[card.finish]);
 
     span.textContent = foil;
 
@@ -66,7 +67,7 @@ function renderCardFinish(card, cell) {
 function renderCardCondition(card, cell) {
     const span = document.createElement('span');
 
-    span.textContent = card.getCondition();
+    span.textContent = card.conditionName;
 
     cell.classList.add('w3-center');
     cell.appendChild(span);

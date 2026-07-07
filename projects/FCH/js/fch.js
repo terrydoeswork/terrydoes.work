@@ -1,4 +1,4 @@
-import * as API from '../../../assets/js/terrydoeslibrary.js';
+import * as API from '../../../js/terrydoeslibrary.js';
 
 /**
  * @param {Object} obj Converts to JSON to download
@@ -90,33 +90,6 @@ export function convertCardArrayToTCGPlayerList(cardArray) {
     })
 
     return targetArray;
-}
-
-/**
- * Parses CSV files in a cutesy way.
- * @param {File} file 
- * @returns 
- */
-export function parseCSV(file) {
-    return new Promise((resolve, reject) => {
-        Papa.parse(file, {
-            header: true,
-            skipEmptyLines: true,
-            complete: results => resolve(results.data),
-            error: reject
-        });
-    });
-}
-
-export function parseTXT(file) {
-    return new Promise((resolve, reject) => {
-        Papa.parse(file, {
-            header: true,
-            skipEmptyLines: true,
-            complete: results => resolve(results.data),
-            error: reject
-        });
-    });
 }
 
 /**
