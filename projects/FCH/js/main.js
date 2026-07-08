@@ -8,8 +8,9 @@ import { initializeStats, resetStats, updateStats } from './mods/stats.js';
 import { initializeExport, registerExports, resetExports } from './mods/export.js';
 import { createCard } from './card/card-factory.js';
 import { updateCardData } from './api/tcg-tracking.js';
-import { validateUpload, disableSubmitButton } from './mods/import.js';
+import { disableSubmitButton } from './mods/import.js';
 import { parseCSV, parseTXT } from './api/papaparse.js';
+import { parseUpload, validateUpload } from './services/file.js';
 
 
 init();
@@ -34,10 +35,10 @@ async function handleSubmit(event) {
         disableSubmitButton(true);
 
         const file = validateUpload();
-        const rows = await parseUpload(file)
+        const data = await parseUpload(file);
         let discardPile = [];
 
-        const cards = await buildCollection(rows, discardPile);
+        const cards = await buildCollection(data, discardPile);
 
         renderCollection(cards);
         registerExports(cards);
@@ -58,36 +59,38 @@ function resetEverything() {
     resetExports();
 }
 
+async function buildCollection(data, discardPile) {
+    const cards = [];
+    const source = data.source;
+    let iCard = {}
 
-async function buildCollection(rows, discardPile) {
-    const cards = []
+    for (const card of data.cards) {
 
-    for (const row of rows) {
-        const card = await createCard(row);
-
-        console.log(card);
-        
         try {
+            iCard = await createCard(card, source);
+                    
+            if(shouldDiscard(iCard)) {
+                discardPile.push(iCard);
+            }
 
-            if (shouldDiscard(card)) {
-                discardPile.push(card);
-            } else cards.push(card);
+            if(!iCard.success) {
+                throw new Error(`Card unsuccessful`)
+            }
 
-        } catch (error) {
-            // card.error = error.message;
+            cards.push(iCard);
+        } catch(error) {
+
+            iCard.success = false;
+            iCard.error.push(error);
+            console.log(iCard);
             console.error('Issue!', error);
-            discardPile.push(card);
+            
+        } finally {
+            // console.log(iCard);
         }
+        
     }
     return cards;
-}
-
-async function parseUpload(file) {
-    if (file.name.toLowerCase().endsWith(".csv")) {
-        return await parseCSV(file);
-    } else {
-        return await parseTXT(file);
-    }
 }
 
 function shouldDiscard(card) {

@@ -1,27 +1,46 @@
 import { Card } from './card.js'
-import { CARD_CONDITION, CARD_FINISH, CARD_RARITY } from "../enums.js";
-import { updateCardData } from '../api/tcg-tracking.js';
+import { CARD_CONDITION, CARD_FINISH, CARD_RARITY, CONDITION_NAME, SOURCE } from "../enums.js";
+import { searchForCard, updateCardData } from '../api/tcg-tracking.js';
 
-export async function createCard(row) {
-    const card = createCardFromTCGPlayerList(row);
-    await updateCardData(card);
+/**
+ * There definitely is a better way to make this. I need a working codebase though, so future terry is doing that
+ * @param {object} data 
+ * @param {SOURCE} source 
+ * @returns {Card}
+ */
+export async function createCard(data, source) {
 
-    return card;
-}
+    let card = new Card();
+    
+    data.name && (card.name = data.name);
+    data.namePrinted && (card.namePrinted = data.namePrinted);
+    data.finish && (card.finish = parseFinish(data.finish));
+    data.rarity && (card.rarity = parseRarity(data.rarity));
+    data.setName && (card.setName = data.setName);
+    data.count && (card.count = Number(data.count));
+    data.collectorNumber && (card.collectorNumber = Number(data.collectorNumber));
+    data.tcgpID && (card.tcgpID = Number(data.tcgpID));
+    data.source && (card.source = data.source);
+    
+    if(!data.condition) {
+        card.condition = CARD_CONDITION.NEAR_MINT;
+        card.error.push(new Error(`condition not found on ${data.name}, assuming NM`))
 
-function createCardFromTCGPlayerList(row) {
-    return new Card({
-        productID: row['Product ID'],
-        tcgpID: row['TCGplayer Id'],
-        name: row['Product Name'],
-        finish: parseFinish(row['Printing']),
-        condition: parseCondition(row['Condition']),
-        count: Number(row['Add to Quantity']),
-        rarity: parseRarity(row['Rarity']),
-        imageLink: row['Photo URL'],
-        collectorNumber: row['Number'],
-        error: undefined
-    });
+    } else card.condition = data.condition;
+
+    try {
+        if(!data.productID) {        
+            card.productID = await searchForCard(data.name, data.setCode, data.collectorNumber);
+        }
+        await updateCardData(card);
+
+    } catch(error) {
+        card.success = false;
+        card.error.push(error)
+
+    } finally {
+        return card;
+    }
 }
 
 /**
@@ -32,8 +51,10 @@ function createCardFromTCGPlayerList(row) {
 function parseFinish(value) {
     switch(value) {
         case 'Foil':
+        case CARD_FINISH.FOIL:
             return CARD_FINISH.FOIL;
         case 'Normal':
+        case CARD_FINISH.NORMAL:
             return CARD_FINISH.NORMAL;
         default:
             return null;
@@ -47,19 +68,33 @@ function parseFinish(value) {
  */
 function parseRarity(value) {
     switch(value) {
+        case CARD_RARITY.COMMON:
         case 'Common':
+        case 'C':
             return CARD_RARITY.COMMON;
+        case CARD_RARITY.UNCOMMON:
         case 'Uncommon':
+        case 'U':
             return CARD_RARITY.UNCOMMON;
+        case CARD_RARITY.RARE:
         case 'Rare':
+        case 'R':
             return CARD_RARITY.RARE;
+        case CARD_RARITY.MYTHIC:
         case 'Mythic':
+        case 'M':
             return CARD_RARITY.MYTHIC;
+        case CARD_RARITY.PROMO:
         case 'Promo':
+        case 'P':
             return CARD_RARITY.PROMO;
+        case CARD_RARITY.LAND:
         case 'Land':
+        case 'L':
             return CARD_RARITY.LAND;
+        case CARD_RARITY.TOKEN:
         case 'Token':
+        case 'T':
             return CARD_RARITY.TOKEN;
         default:
             return null;

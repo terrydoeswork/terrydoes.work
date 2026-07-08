@@ -1,36 +1,51 @@
-
 const LANGUAGE_ENGLISH = 1;
+const GAME = {
+    MTG: 1,
+}
+const URL = 'https://openapi.tcgtracking.com/v1/'
 
 export async function updateCardData(card) {
     
-    const response = await fetchLink(card.TCGTrackingILink);
-    const data = await response.json();
+    const data = await fetchLink(getProductLink(card.productID));
     
     let sku = locateSku(data, card.condition, card.finish);
-    let priceLow, priceMarket, success, error;
-
-    if (isSkuValid(sku)) {
-        priceLow = sku.lowest_price;
-        priceMarket = sku.market_price;
-    } else {
-        error = true;
+    
+    if (!isSkuValid(sku)) {
+        throw new Error(`Could not find sku on card. Critical Error`)
     }
 
-    card.updateFromTCGTracking({
-        success: success,
-        error: error,
+    card.priceLow = Number(sku.lowest_price);
+    card.priceMarket = Number(sku.market_price);
+    card.setCode = data.product.set_abbr;
+    card.imageLink = data.product.image_url;
 
-        priceLow: priceLow,
-        priceMarket: priceMarket,
-
-        setCode: data.product.set_abbr,
-        namePrinted: data.product.clean_name
-    })
-    
     return card;
 }
 
+export async function searchForCard(cardName, setCode, collectorNumber) {
+    const searchData = await fetchLink(URL + GAME.MTG + '/search?q=' + setCode);
+    const set = searchData.sets.find(set => 
+        set.abbreviation === setCode
+    )
+    const setID = set.id;
 
+    const setData = await fetchLink(URL + GAME.MTG + '/sets/' + setID + '/cards');
+
+    const card = setData.products.find(card =>
+        card.name == cardName ||
+        card.clean_name == cardName ||
+        card.number == collectorNumber
+    )
+    
+    
+    if (card?.id) {
+        return Number(card.id);
+
+    } else throw new Error(
+        `Card not found: ${cardName} \n` +
+        `Details:`, card
+    )
+}
 
 async function fetchLink(link) {
     const response = await fetch(link)
@@ -41,7 +56,8 @@ async function fetchLink(link) {
             `${errorText}`
         );
     }
-    return response;
+
+    return await response.json();
 }
 
 function locateSku(data, condition, finish, language=LANGUAGE_ENGLISH) {
@@ -53,5 +69,9 @@ function locateSku(data, condition, finish, language=LANGUAGE_ENGLISH) {
 }
 
 function isSkuValid(sku) {
-    return sku.lowest_price != null
+    return sku?.lowest_price != null
+}
+
+function getProductLink(productID) {
+    return URL + '/products/' + productID;
 }

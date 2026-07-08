@@ -63,3 +63,9 @@ export const RARITY_NAME = Object.freeze({
     [CARD_RARITY.PROMO]: 'Promo',
     [CARD_RARITY.LAND]: 'Land'
 });
+
+export const SOURCE = Object.freeze({
+    UNKNOWN: -1,
+    TCGPLAYER: 1,
+    MOXFIELD: 2
+})

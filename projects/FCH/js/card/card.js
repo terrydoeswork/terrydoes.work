@@ -1,43 +1,67 @@
-import { CARD_CONDITION, CARD_FINISH, CARD_RARITY, CONDITION_NAME, FINISH_NAME, RARITY_NAME } from '../enums.js';
+import { CARD_CONDITION, CARD_FINISH, CARD_RARITY, CONDITION_NAME, FINISH_EMOJI, FINISH_NAME, RARITY_NAME, SOURCE} from '../enums.js';
 
 export class Card {
-    constructor(data) {
+    
+    /**
+     * Create a Card Object
+     * @param {string} name Name including (foil etched) and such
+     * @param {string} namePrinted Name as printed on the card 
+     * @param {CARD_FINISH} finish nonfoil, foil 
+     * @param {CARD_CONDITION} condition NM, LP, MP, HP, DMG
+     * @param {CARD_RARITY} rarity Token, Rare, Promo etc 
+     * @param {string} setCode 3-4 letter code for set 
+     * @param {string} setName name of set. Usually pretty long 
+     * @param {number} count number of identical cards this object repersents
+     * @param {number} collectorNumber 1-4 digit number
+     * @param {number} priceLow number of pennies. Divide by 100 to get in USD
+     * @param {number} priceMarket number of pennies. Divide by 100 to get in USD
+     * @param {number} productID internal number of card
+     * @param {number} tcgpID inernal number of card including condition and finish
+     * @param {string} imageLink link to card image file 
+     * @param {boolean} success default=true, set to false if issue 
+     * @param {string} notes pretty useless, might delete
+     * @param {Error[]} error collection of errors when constructing card 
+     * @param {SOURCE} source where the card data is parsed from
+     */
+    constructor(
+        name=undefined, namePrinted=undefined, finish=undefined, condition=undefined, rarity=undefined, setCode=undefined, setName=undefined, count=undefined, collectorNumber=undefined, 
+        priceLow=undefined, priceMarket=undefined, 
+        productID=undefined, tcgpID=undefined, imageLink=undefined, 
+        success=true, notes=undefined, error=[], source=SOURCE.UNKNOWN) {
         // card physical details 
-        this.name = data.name;
-        this.namePrinted = data.namePrinted;
-        this.finish = data.finish;
-        this.condition = data.condition;
-        this.rarity = data.rarity;
-        this.setCode = data.setCode;
-        this.setName = data.setName;
-        this.count = data.count;
-        this.collectorNumber = data.collectorNumber;
+        this.name = name;
+        this.namePrinted = namePrinted;
+        this.finish = finish;
+        this.condition = condition;
+        this.rarity = rarity;
+        this.setCode = setCode;
+        this.setName = setName;
+        this.count = count;
+        this.collectorNumber = collectorNumber;
 
         // pricing
-        this.priceLow = data.priceLow;
-        this.priceMarket = data.priceMarket;
+        this.priceLow = priceLow;
+        this.priceMarket = priceMarket;
 
         // tcgplayer / tcgtacking data
-        this.productID = data.productID;
-        this.tcgpID = data.tcgpID;
-        this.imageLink = data.imageLink;
+        this.productID = productID;
+        this.tcgpID = tcgpID;
+        this.imageLink = imageLink;
 
         // meta data
-        this.success = data.success ?? true;
-        this.notes = data.notes;
-        this.error = data.error;
+        this.success = success;
+        this.notes = notes;
+        this.error = error;
+        this.source = source;
     }
-   
-    updateFromTCGTracking(data) {
-        this.success = data.success;
-        
-        this.error = data.error;
 
+    updateFromTCGTracking(data) {
         this.priceLow = data.priceLow;
         this.priceMarket = data.priceMarket;
 
         this.setCode = data.setCode;
         this.namePrinted = data.namePrinted;
+        this.imageLink = data.imageLink;
 
     }
 
@@ -66,5 +90,9 @@ export class Card {
     get TCGTrackingILink() {
         return 'https://tcgtracking.com/tcgapi/v1/products/' + this.productID;
 
+    }
+
+    get finishEmoji() {
+        return FINISH_EMOJI[this.finish];
     }
 }

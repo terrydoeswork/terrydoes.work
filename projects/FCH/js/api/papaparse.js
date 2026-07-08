@@ -19,14 +19,3 @@ export function parseTXT(file) {
         });
     });
 }
-
-export function parseMoxfield(file) {
-    return new Promise((resove, reject) => {
-        Papa.parse(file, {
-            header: false,
-            skipEmptyLines: true,
-            complete: results => resolve(results.data),
-            error: reject
-        })
-    })
-}
