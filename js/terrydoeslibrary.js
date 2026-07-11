@@ -123,9 +123,6 @@ export function convertStringToNumber(str) {
  */
 export function createTable(columnArray, bodyArray, table = null) {
 
-    
-    console.log(bodyArray);
-
     if(table == null) {
         table = document.createElement('table')
     }

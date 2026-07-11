@@ -88,8 +88,6 @@ async function buildCollection(data, discardPile) {
             
         } finally {
             console.log(iCard);
-            // console.log(discardPile);
-            // console.log(cards);
             
             
         }
@@ -99,11 +97,6 @@ async function buildCollection(data, discardPile) {
 }
 
 function shouldDiscard(card) {
-    console.log((
-        DOM.import.trimBulk.checked &&
-        card.rarity < ENUM.CARD_RARITY.RARE
-    ) || card.priceLow < DOM.import.priceThreshold.value);
-    
     return (
         DOM.import.trimBulk.checked &&
         card.rarity < ENUM.CARD_RARITY.RARE

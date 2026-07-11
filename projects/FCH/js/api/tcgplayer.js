@@ -10,7 +10,6 @@ import { parseCSV } from "./papaparse.js";
 export async function parseTCGP(file) {
     const rows = await parseCSV(file)
     
-    console.log(rows);
     let dataArray = [];
     for (const row of rows) {
         dataArray.push(createCardFromTCGPlayerList(row))
