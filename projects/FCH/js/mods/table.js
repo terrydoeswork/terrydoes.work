@@ -99,7 +99,7 @@ function renderCardCount(card, cell) {
  * 
  * @param {Card[]} cards
  */
-export function renderCollection(cards) {
+export function renderCollection(cards) {    
     createTable(TABLE_COLUMNS, cards, DOM.table);
 }
 

@@ -5,7 +5,7 @@ const GAME = {
 const URL = 'https://openapi.tcgtracking.com/v1/'
 
 export async function updateCardData(card) {
-    
+        
     const data = await fetchLink(getProductLink(card.productID));
     
     let sku = locateSku(data, card.condition, card.finish);

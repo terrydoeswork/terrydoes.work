@@ -51,7 +51,7 @@ export class Card {
         // meta data
         this.success = success;
         this.notes = notes;
-        this.error = error;
+        this.error = [];
         this.source = source;
     }
 
@@ -75,7 +75,7 @@ export class Card {
     /**
      * @returns {boolean}
      */
-    isUnderRare() {
+    get isUnderRare() {
         return this.rarity < CARD_RARITY.RARE;
     }
 
@@ -90,6 +90,10 @@ export class Card {
     get TCGTrackingILink() {
         return 'https://tcgtracking.com/tcgapi/v1/products/' + this.productID;
 
+    }
+
+    get rarityName() {
+        return RARITY_NAME[this.rarity];
     }
 
     get finishEmoji() {

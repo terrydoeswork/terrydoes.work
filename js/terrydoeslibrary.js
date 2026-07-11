@@ -122,6 +122,10 @@ export function convertStringToNumber(str) {
  * @returns {HTMLTableElement}
  */
 export function createTable(columnArray, bodyArray, table = null) {
+
+    
+    console.log(bodyArray);
+
     if(table == null) {
         table = document.createElement('table')
     }

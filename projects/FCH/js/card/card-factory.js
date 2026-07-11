@@ -9,7 +9,7 @@ import { searchForCard, updateCardData } from '../api/tcg-tracking.js';
  * @returns {Card}
  */
 export async function createCard(data, source) {
-
+    
     let card = new Card();
     
     data.name && (card.name = data.name);
@@ -31,7 +31,7 @@ export async function createCard(data, source) {
     try {
         if(!data.productID) {        
             card.productID = await searchForCard(data.name, data.setCode, data.collectorNumber);
-        }
+        } else card.productID = data.productID;
         await updateCardData(card);
 
     } catch(error) {
@@ -48,7 +48,7 @@ export async function createCard(data, source) {
  * @param {string} value
  * @returns {CARD_FINISH}
  */
-function parseFinish(value) {
+export function parseFinish(value) {
     switch(value) {
         case 'Foil':
         case CARD_FINISH.FOIL:
@@ -66,7 +66,7 @@ function parseFinish(value) {
  * @param {string} value
  * @returns {CARD_RARITY}
  */
-function parseRarity(value) {
+export function parseRarity(value) {
     switch(value) {
         case CARD_RARITY.COMMON:
         case 'Common':
@@ -106,7 +106,7 @@ function parseRarity(value) {
  * @param {string} value 
  * @returns {CARD_CONDITION}
  */
-function parseCondition(value) {
+export function parseCondition(value) {
     switch(value) {
         case 'Near Mint':
             return CARD_CONDITION.NEAR_MINT;

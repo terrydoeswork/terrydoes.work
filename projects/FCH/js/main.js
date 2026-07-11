@@ -36,6 +36,7 @@ async function handleSubmit(event) {
 
         const file = validateUpload();
         const data = await parseUpload(file);
+        
         let discardPile = [];
 
         const cards = await buildCollection(data, discardPile);
@@ -60,22 +61,22 @@ function resetEverything() {
 }
 
 async function buildCollection(data, discardPile) {
+    
     const cards = [];
     const source = data.source;
     let iCard = {}
 
-    for (const card of data.cards) {
+    for (const card of data) {
 
         try {
             iCard = await createCard(card, source);
                     
             if(shouldDiscard(iCard)) {
                 discardPile.push(iCard);
-            }
-
-            if(!iCard.success) {
+                
+            } else if(!iCard.success) {
                 throw new Error(`Card unsuccessful`)
-            }
+            } else
 
             cards.push(iCard);
         } catch(error) {
@@ -86,7 +87,11 @@ async function buildCollection(data, discardPile) {
             console.error('Issue!', error);
             
         } finally {
-            // console.log(iCard);
+            console.log(iCard);
+            // console.log(discardPile);
+            // console.log(cards);
+            
+            
         }
         
     }
@@ -94,9 +99,13 @@ async function buildCollection(data, discardPile) {
 }
 
 function shouldDiscard(card) {
+    console.log((
+        DOM.import.trimBulk.checked &&
+        card.rarity < ENUM.CARD_RARITY.RARE
+    ) || card.priceLow < DOM.import.priceThreshold.value);
+    
     return (
         DOM.import.trimBulk.checked &&
-        card.isCardUnderRare()
-    ) || 
-    card.priceLow < DOM.import.priceThreshold.value;
+        card.rarity < ENUM.CARD_RARITY.RARE
+    ) || card.priceLow < DOM.import.priceThreshold.value;
 }

@@ -1,3 +1,4 @@
+import { parseCondition, parseFinish, parseRarity } from "../card/card-factory.js";
 import { parseCSV } from "./papaparse.js";
 
 
@@ -7,8 +8,10 @@ import { parseCSV } from "./papaparse.js";
  * @returns {object[]}
  */
 export async function parseTCGP(file) {
-    const rows = parseCSV(file)
-    let dataArray = []
+    const rows = await parseCSV(file)
+    
+    console.log(rows);
+    let dataArray = [];
     for (const row of rows) {
         dataArray.push(createCardFromTCGPlayerList(row))
     }
@@ -17,15 +20,15 @@ export async function parseTCGP(file) {
 
 function createCardFromTCGPlayerList(row) {
     return {
-        productID: data['Product ID'],
-        tcgpID: data['TCGplayer Id'],
-        name: data['Product Name'],
-        finish: parseFinish(data['Printing']),
-        condition: parseCondition(data['Condition']),
-        count: Number(data['Add to Quantity']),
-        rarity: parseRarity(data['Rarity']),
-        imageLink: data['Photo URL'],
-        collectorNumber: data['Number'],
+        productID: row['Product ID'],
+        tcgpID: row['TCGplayer Id'],
+        name: row['Product Name'],
+        finish: parseFinish(row['Printing']),
+        condition: parseCondition(row['Condition']),
+        count: Number(row['Add to Quantity']),
+        rarity: parseRarity(row['Rarity']),
+        imageLink: row['Photo URL'],
+        collectorNumber: row['Number'],
         error: undefined
     };
 }
