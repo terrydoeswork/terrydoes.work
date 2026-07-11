@@ -9,22 +9,6 @@ export function moneyRound(number) {
     return Math.ceil(number * 100) / 100;
 }
 
-/**
- * Parses CSV files to readable JSON
- * @param {File} file 
- * @returns {JSON}
- */
-export function parseCSV(file) {
-    return new Promise((resolve, reject) => {
-        Papa.parse(file, {
-            header: true,
-            skipEmptyLines: true,
-            complete: results => resolve(results.data),
-            error: reject
-        });
-    });
-}
-
 // Source - https://stackoverflow.com/a/14268260
 // Posted by Paul S., modified by community. See post 'Timeline' for change history
 // Retrieved 2026-07-02, License - CC BY-SA 3.0
@@ -38,7 +22,6 @@ export function sortTable(table, columnIndex, ascending = true) {
 
     const tbody = table.querySelector('tbody') || table;
     const rows = Array.from(tbody.querySelectorAll('tr'));
-
 
     // Sort rows based on the text content of the specified column index
     const sortedRows = rows.sort((rowA, rowB) => {
@@ -66,7 +49,7 @@ export function sortTable(table, columnIndex, ascending = true) {
  * @param {string} displayText Text shown on button
  * @param {string} color colors found @ https://www.w3schools.com/w3css/w3css_colors.asp
  * @param {callback} callback event to fire when clicked
- * @returns {HTMLButtonElement} Button element. must still attach it
+ * @returns {HTMLButtonElement} Button element. must still attach
  */
 export function createButtonElement(displayText, color, callback) {
     let btn = document.createElement('input');
@@ -82,25 +65,6 @@ export function createButtonElement(displayText, color, callback) {
 
 /**
  * 
- * @param {Object} obj 
- * @param {string} filename 
- */
-export function downloadCSV(obj, filename) {
-    let newCSV = Papa.unparse(obj);
-    const blob = new Blob([newCSV], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-
-    link.href = url;
-    link.download = filename + '.csv';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-}
-
-/**
- * 
  * @param {string} str
  * @returns {number}
  */
@@ -108,7 +72,6 @@ export function convertStringToNumber(str) {
     let newStr = str.toString()
 
     if (newStr.includes('%')) return (parseFloat(newStr.replace(/[%\$,]/g, "")) / 100);
-    
 
     return parseFloat(newStr.replace(/[\$,]/g, ""));
 }
@@ -160,84 +123,3 @@ export function createTable(columnArray, bodyArray, table = null) {
 
     return table;
 }
-/**
-const columns = [
-    {
-        header: 'Card',
-        headerClasses: [],
-        render(card, cell) {
-
-            let text = `${card.name}`;
-            const span = document.createElement('span');
-            span.textContent = text;
-
-            cell.addEventListener('mouseenter', () => {
-               cardPreview.src = card.imageLink;
-               cardPreview.hidden = false;
-            });
-
-            cell.addEventListener('mousemove', (e) => {
-               cardPreview.style.left = `${e.clientX + 20}px`;
-               cardPreview.style.top = `${e.clientY + 20}px`;
-            });
-
-            cell.addEventListener('mouseleave', () => {
-               cardPreview.hidden = true;
-            });
-
-            cell.appendChild(span)
-        }
-    },
-    {
-        header: 'Finish',
-        headerClasses: ['w3-center'],
-        render(card, cell) {
-            const span = document.createElement('span');
-            const foil = (card.isFoil()) ? '🌈' : '⬛';
-
-            span.textContent = foil;
-
-            cell.classList.add('w3-center');
-            cell.appendChild(span);
-        }
-    },
-    {
-        header: 'Condition',
-        headerClasses: ['w3-center'],
-        render(card, cell) {
-            const span = document.createElement('span');
-
-            span.textContent = card.getCondition();
-
-            cell.classList.add('w3-center');
-            cell.appendChild(span);
-        }
-    },
-    {
-        header: 'Low Price',
-        headerClasses: ['w3-center'],
-        render(card, cell) {
-            const span = document.createElement('span');
-
-            if(card.success) {
-                span.textContent = `$${card.priceLow}`;
-            } else {
-                span.textContent = `$???`
-            }
-
-            cell.classList.add('w3-right-align');
-            cell.appendChild(span)
-        }
-    },
-    {
-        header: 'Count',
-        headerClasses: ['w3-center'],
-        render(card, cell) {
-            const span = document.createElement('span');
-            span.textContent = card.count;
-            
-            cell.classList.add('w3-right-align');
-            cell.appendChild(span);
-        }
-    }
- */
