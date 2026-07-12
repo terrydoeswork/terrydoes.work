@@ -1,3 +1,5 @@
+// TODO- move file.js to core/ 
+
 // responsible for parsing file and putting it in standardized data object
 // standardized data obj is written same as Card Object
 

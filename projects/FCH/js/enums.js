@@ -1,3 +1,5 @@
+// TODO- move ENUMS.js to core/
+
 /**
  * Possible Card Coditions.
  * @readonly
