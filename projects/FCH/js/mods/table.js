@@ -3,6 +3,7 @@ import { createTable } from '../../../../js/terrydoeslibrary.js';
 import { DOM } from '../core/DOM.js';
 import { FINISH_EMOJI } from '../enums.js';
 
+// TODO- Create JSDocs
 export const TABLE_COLUMNS = [  
     {
         header: 'Card',
@@ -95,10 +96,7 @@ function renderCardCount(card, cell) {
     cell.appendChild(span);
 }
 
-/**
- * 
- * @param {Card[]} cards
- */
+// TODO- Create JSDocs
 export function renderCollection(cards) {    
     createTable(TABLE_COLUMNS, cards, DOM.table);
 }

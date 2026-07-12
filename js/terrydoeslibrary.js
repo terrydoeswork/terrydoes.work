@@ -1,5 +1,6 @@
-
-
+// TODO- Create file of standardized functions for creating HTML Buttons/Elements
+// TODO- Create file of standardized functions for reading HTML input/elements? 
+// TODO- Create file for money handling and display (ie moneyRound and moneyDisplay)
 /**
  * EXAMPLE number=5.0244 RETURNS 5.02
  * @param {Number} number - Number to be rounded.
@@ -68,6 +69,7 @@ export function createButtonElement(displayText, color, callback) {
  * @param {string} str
  * @returns {number}
  */
+//! TODO- Currently dividing end product by 100
 export function convertStringToNumber(str) {
     let newStr = str.toString()
 
@@ -84,6 +86,7 @@ export function convertStringToNumber(str) {
  * @param {HTMLTableElement} table - if mot set, create table.
  * @returns {HTMLTableElement}
  */
+// TODO- Move this to HTML element creating files
 export function createTable(columnArray, bodyArray, table = null) {
 
     if(table == null) {

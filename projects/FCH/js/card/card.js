@@ -1,5 +1,6 @@
 import { CARD_CONDITION, CARD_FINISH, CARD_RARITY, CONDITION_NAME, FINISH_EMOJI, FINISH_NAME, RARITY_NAME, SOURCE} from '../enums.js';
 
+// TODO- Create better JSDocs
 export class Card {
     
     /**
@@ -23,6 +24,7 @@ export class Card {
      * @param {Error[]} error collection of errors when constructing card 
      * @param {SOURCE} source where the card data is parsed from
      */
+    
     constructor(
         name=undefined, namePrinted=undefined, finish=undefined, condition=undefined, rarity=undefined, setCode=undefined, setName=undefined, count=undefined, collectorNumber=undefined, 
         priceLow=undefined, priceMarket=undefined, 

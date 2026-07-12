@@ -36,7 +36,7 @@ async function handleSubmit(event) {
 
         const file = validateUpload();
         const data = await parseUpload(file);
-        
+
         let discardPile = [];
 
         const cards = await buildCollection(data, discardPile);
@@ -54,12 +54,15 @@ async function handleSubmit(event) {
     }
 }
 
+// TODO- Change to Globally Defined Object
 function resetEverything() {
     resetTable();
     resetStats();
     resetExports();
 }
 
+// TODO- use promise all mapping
+// TODO- create seperate file for this?
 async function buildCollection(data, discardPile) {
     
     const cards = [];
@@ -80,7 +83,6 @@ async function buildCollection(data, discardPile) {
 
             cards.push(iCard);
         } catch(error) {
-
             iCard.success = false;
             iCard.error.push(error);
             console.log(iCard);
@@ -89,13 +91,14 @@ async function buildCollection(data, discardPile) {
         } finally {
             console.log(iCard);
             
-            
         }
-        
+
     }
     return cards;
 }
 
+
+// TODO- maybe abstract this
 function shouldDiscard(card) {
     return (
         DOM.import.trimBulk.checked &&

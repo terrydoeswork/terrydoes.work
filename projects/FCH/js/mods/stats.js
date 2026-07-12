@@ -11,10 +11,7 @@ export function initializeStats() {
     DOM.stats.percentageRange.addEventListener('input', handleRange);
 }
 
-/**
- * 
- * @param {STATS} stats 
- */
+// TODO- Create JSDocs
 export function updateStats(cards) {
     
     let stats = calculateStats(cards);

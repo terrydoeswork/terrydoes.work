@@ -36,16 +36,19 @@ export const CARD_RARITY = Object.freeze({
     LAND: 110,
 })
 
+// TODO- Create JSDocs
 export const FINISH_EMOJI = Object.freeze({
     [CARD_FINISH.NORMAL]: '⬛',
     [CARD_FINISH.FOIL]: '🌈'
 });
 
+// TODO- Create JSDocs
 export const FINISH_NAME = Object.freeze({
     [CARD_FINISH.NORMAL]: 'Normal',
     [CARD_FINISH.FOIL]: 'Foil'
 })
 
+// TODO- Create JSDocs
 export const CONDITION_NAME = Object.freeze({
     [CARD_CONDITION.NEAR_MINT]: 'NM',
     [CARD_CONDITION.LIGHTLY_PLAYED]: 'LP',
@@ -54,6 +57,7 @@ export const CONDITION_NAME = Object.freeze({
     [CARD_CONDITION.DAMAGED]: 'DMG'
 });
 
+// TODO- Create JSDocs
 export const RARITY_NAME = Object.freeze({
     [CARD_RARITY.COMMON]: 'Common',
     [CARD_RARITY.UNCOMMON]: 'Uncommon',
@@ -64,6 +68,7 @@ export const RARITY_NAME = Object.freeze({
     [CARD_RARITY.LAND]: 'Land'
 });
 
+// TODO- Create JSDocs
 export const SOURCE = Object.freeze({
     UNKNOWN: -1,
     TCGPLAYER: 1,

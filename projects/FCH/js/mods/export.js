@@ -1,5 +1,6 @@
 import { DOM } from "../core/DOM.js"
 
+// TODO- Refactor filename to include date
 const CONFIG = {
     FILENAME: 'Collection'
 }
@@ -20,6 +21,7 @@ const FILE_TYPES = {
 }
 
 
+// TODO- Seperate JSON and TCGPlayer
 const EXPORTTYPES = [
     {
         fileType: FILE_TYPES.JSON,
@@ -42,6 +44,7 @@ let COLLECTION = [];
 
 
 // exports 
+// TODO- Create JSDocs
 export function initializeExport() {
     hideExportWindow(true);
 }
@@ -55,6 +58,7 @@ export function resetExports() {
     })
 }
 
+// TODO- Create JSDocs
 export function registerExports(cardArray) { 
     // called in main.js
 

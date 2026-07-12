@@ -8,6 +8,7 @@ import { searchForCard, updateCardData } from '../api/tcg-tracking.js';
  * @param {SOURCE} source 
  * @returns {Card}
  */
+// TODO- Find the better way to make this
 export async function createCard(data, source) {
     
     let card = new Card();
@@ -48,6 +49,7 @@ export async function createCard(data, source) {
  * @param {string} value
  * @returns {CARD_FINISH}
  */
+// TODO- MAYBE refactor to parseValueToFinish?
 export function parseFinish(value) {
     switch(value) {
         case 'Foil':
@@ -66,6 +68,7 @@ export function parseFinish(value) {
  * @param {string} value
  * @returns {CARD_RARITY}
  */
+// TODO- MAYBE refactor to parseValueToRarity?
 export function parseRarity(value) {
     switch(value) {
         case CARD_RARITY.COMMON:
@@ -106,6 +109,7 @@ export function parseRarity(value) {
  * @param {string} value 
  * @returns {CARD_CONDITION}
  */
+// TODO- MAYBE refactor to parseValueToCondition?
 export function parseCondition(value) {
     switch(value) {
         case 'Near Mint':
@@ -128,6 +132,7 @@ export function parseCondition(value) {
  * @param {string} value 
  * @returns {string}
  */
+// TODO- why did I do this?
 function normalize(value) {    
     if (!value) {
         throw new Error("Missing value");

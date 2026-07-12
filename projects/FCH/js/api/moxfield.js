@@ -1,5 +1,6 @@
 import { CARD_CONDITION, SOURCE } from "../enums.js";
 
+// TODO- SET_THELIST_BS is BS. Create seperate const Object for edgecases?
 const DELIMITER = {
     COUNT:' ',
     NAME:' (',
@@ -8,6 +9,7 @@ const DELIMITER = {
     FINISH:'*F*',
     SET_THELIST_BS: '-'
 }
+
 const FOIL_CODE = '*F*';
 const THE_LIST_SETCODE = 'PLST';
 
@@ -15,6 +17,7 @@ const THE_LIST_SETCODE = 'PLST';
  *  
  * @param {File} file 
  */
+// TODO- Create better JSDocs
 export async function parseMoxfield(file) {
     const str = (await file.text()).split('\n');
     let cardList = [];
@@ -54,6 +57,7 @@ function cleanLine(line) {
  * needs improvement. Cant think how right now though.
  * @returns {object}
  */
+// TODO- Write code more elegantly
 function findAll(line) {
     
     let obj = {};
@@ -96,6 +100,7 @@ function findFinish(line) {
     } else return 'Normal';
 }
 
+// TODO- Abstract into Terry Does Library?
 function splitX(line, delimiter) {
     const index = line.indexOf(delimiter);
     let targetArray = []

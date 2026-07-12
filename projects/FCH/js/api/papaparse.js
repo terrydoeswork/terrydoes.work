@@ -1,3 +1,5 @@
+
+// TODO- Create JSDocs
 export function parseCSV(file) {
     return new Promise((resolve, reject) => {
         Papa.parse(file, {
@@ -9,6 +11,8 @@ export function parseCSV(file) {
     });
 }
 
+// TODO- Create JSDocs
+//! TODO- Deprecated. Delete this
 export function parseTXT(file) {
     return new Promise((resolve, reject) => {
         Papa.parse(file, {

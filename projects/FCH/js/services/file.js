@@ -7,6 +7,7 @@ import { parseTCGP } from '../api/tcgplayer.js';
 import { DOM } from '../core/DOM.js'
 
 
+// TODO- Create JSDocs
 export function validateUpload() {
     const files = DOM.import.fileUpload.files;
 
@@ -18,7 +19,8 @@ export function validateUpload() {
     return files[0];
 }
 
-
+// TODO- Create JSDocs
+// TODO- Add better scanning for TCGPlayer and Moxfield
 export async function parseUpload(file) {
     if (file.name.toLowerCase().endsWith('.csv')) {
 

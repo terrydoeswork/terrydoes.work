@@ -4,6 +4,8 @@ const GAME = {
 }
 const URL = 'https://openapi.tcgtracking.com/v1/'
 
+
+// TODO- Create JSDocs
 export async function updateCardData(card) {
         
     const data = await fetchLink(getProductLink(card.productID));
@@ -22,6 +24,8 @@ export async function updateCardData(card) {
     return card;
 }
 
+// TODO- Create JSDocs
+// TODO- Write this more elegantly
 export async function searchForCard(cardName, setCode, collectorNumber) {
     const searchData = await fetchLink(URL + GAME.MTG + '/search?q=' + setCode);
     const set = searchData.sets.find(set => 
