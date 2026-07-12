@@ -124,7 +124,7 @@ function toTCGPlayerList() {
     COLLECTION.forEach(card => {
         targetArray.push({
             'Product ID': card.productID,
-            'TCGplayer Id': card.tcgpid,
+            'TCGplayer Id': card.tcgpID,
             'Product Line': 'Magic: The Gathering',
             'Set Name': '',
             'Product Name': card.name,
