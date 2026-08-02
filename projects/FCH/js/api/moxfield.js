@@ -41,10 +41,7 @@ export async function parseMoxfield(file) {
         })
     })
     
-    return {
-        source: SOURCE.MOXFIELD,
-        cards: cardList
-    }
+    return cardList
 }
 
 function cleanLine(line) {
@@ -64,6 +61,9 @@ function findAll(line) {
 
     obj.countArray = splitX(line, DELIMITER.COUNT); // returns ['1', 'name (set) 001 *f*']
     obj.nameArray = splitX(obj.countArray[1], DELIMITER.NAME); //returns ['name', '(set) 001 *f*']
+
+    console.log(obj.nameArray);
+    
     
     obj.setArray = splitX(obj.nameArray[1], DELIMITER.SET); //returns ['set', '001 *f*']
 
