@@ -4,7 +4,9 @@ import { DOM } from "../core/DOM.js";
 let STATS = {
     totalCards: 0,
     totalPrice: 0.00,
-    percentage: .65
+    percentage: .65,
+    successfulCards: 0,
+    failedCards: 0
 }
 
 export function initializeStats() {
@@ -12,27 +14,32 @@ export function initializeStats() {
 }
 
 // TODO- Create JSDocs
-export function updateStats(cards) {
+export function updateStats(collection) {
     
-    let stats = calculateStats(cards);
+    let stats = calculateStats(collection);
     
     if(stats) Object.assign(STATS, stats);
+
     renderStats();
 }
 
 export function resetStats() {
     STATS = {
-    totalCards: 0,
-    totalPrice: 0.00,
-    percentage: .65
+        totalCards: 0,
+        totalPrice: 0.00,
+        percentage: .65,
+        successfulCards: 0,
+        failedCards: 0
     }
     renderStats();
 }
 
 function renderStats() {
-    renderTotalCards();
+    renderSuccessfulCards();
     renderTotalPrice();
     renderPercentPrice();
+    renderFailedCards();
+    renderTrimmedCards();
 }
 
 function handleRange(event) {
@@ -40,8 +47,16 @@ function handleRange(event) {
     renderPercentPrice();
 }
 
-function renderTotalCards() {
-    DOM.stats.totalCards.textContent = STATS.totalCards;
+function renderTrimmedCards() {
+    DOM.stats.trimmedCards.textContent = STATS.trimmedCards;
+}
+
+function renderFailedCards() {
+    DOM.stats.failedCards.textContent = STATS.failedCards;
+}
+
+function renderSuccessfulCards() {
+    DOM.stats.successfulCards.textContent = STATS.successfulCards;
 }
 
 function renderTotalPrice() {
@@ -54,15 +69,24 @@ function renderPercentPrice() {
     DOM.stats.percentagePrice.textContent = '$' + moneyRound(STATS.percentage * STATS.totalPrice);
 }
 
-function calculateStats(cards) {
-    let totalCards = cards.length;
+function calculateStats(collection) {
+
+    let failedCards = collection.failed.length;
+    let trimmedCards = collection.trimmed.length;
+    let successfulCards = collection.success.length;
+    let totalCards = collection.success.length + collection.failed.length + collection.trimmed.length;
     let totalPrice = 0;
-    cards.forEach(card => {
+
+    collection.success.forEach(card => {
         totalPrice += parseFloat(card.priceLow);
     });
 
     return {
         totalCards: totalCards,
-        totalPrice: moneyRound(totalPrice)
+        totalPrice: moneyRound(totalPrice),
+        successfulCards: successfulCards,
+        failedCards: failedCards,
+        trimmedCards: trimmedCards,
+
     }
 }

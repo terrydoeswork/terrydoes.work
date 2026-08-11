@@ -126,3 +126,17 @@ export function createTable(columnArray, bodyArray, table = null) {
 
     return table;
 }
+
+/**
+ * 
+ * @param {number} value 
+ * @param {number} target 
+ * @param {number} percent 1-100 only
+ * @returns {number}
+ */
+export function isWithinPercentage(value, target, percent) {
+    if (target === 0) return value === 0;
+    
+    const allowedVariance = target * (percent / 100);
+    return Math.abs(target - value) <= allowedVariance;
+}

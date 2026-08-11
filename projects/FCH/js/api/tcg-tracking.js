@@ -7,7 +7,7 @@ const URL = 'https://openapi.tcgtracking.com/v1/'
 
 // TODO- Create JSDocs
 export async function updateCardData(card) {
-        
+
     const data = await fetchLink(getProductLink(card.productID));
     
     let sku = locateSku(data, card.condition, card.finish);
@@ -78,4 +78,24 @@ function isSkuValid(sku) {
 
 function getProductLink(productID) {
     return URL + '/products/' + productID;
+}
+
+/**
+ * 
+ * @param {string} cardName Name of card searching for
+ * @param {string} setAbbr 3-4 Letter string
+ * @param {number} setCode 6-10 digit code used by TCGPlayer and OpenAPI
+ * @returns {object} 
+ */
+export async function fetchCardData(cardName, setAbbr=null, setCode=null) {
+    
+}
+
+/**
+ * 
+ * @param {string} set can be abbr (FDN) or full name (Foundations)
+ * @param {boolean} isSupplemental 
+ */
+function fetchSetData(set, isSupplemental=false) {
+
 }

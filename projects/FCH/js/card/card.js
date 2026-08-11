@@ -1,3 +1,4 @@
+import { isWithinPercentage } from '../../../../js/terrydoeslibrary.js';
 import { CARD_CONDITION, CARD_FINISH, CARD_RARITY, CONDITION_NAME, FINISH_EMOJI, FINISH_NAME, RARITY_NAME, SOURCE} from '../enums.js';
 
 // TODO- Create better JSDocs
@@ -72,6 +73,13 @@ export class Card {
      */
     isFoil() {
         return this.finish === CARD_FINISH.FOIL;
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    get isSus() {
+        return !isWithinPercentage(this.priceLow, this.priceMarket, 50)
     }
 
     /**

@@ -10,7 +10,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.js"
         integrity="sha512-M0cjXJTonbWEdLI3HJIoJSQBb9980RWmOCk+tvWkhgFrAZqSSIg1+1Db/vDu7Qk9W3L90gBynve17PYvarjfQA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="module" src="js/fch.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
     
     <!-- Project Local Files -->
@@ -38,7 +37,7 @@
             <section class="">
                 <div class="w3-container">
                     <h1 class="w3-header">TCGPlayer Collection Trackers</h1>
-                    <p><b>v1.2</b> Mostly jsut refactoring. I feel very productive. There are still bugs, but Im proud of this.</p>
+                    <p><b>v1.4</b> Added feature to alert user if lowest price is %50 lower than market price</p>
                     <p>
                         This project is to serve a function that the TCGPlayer App currently lacks. Display any
                         collection as TCGP Low. I do not know why it is not, because it will display Market Price; and
@@ -68,8 +67,16 @@
                     <div class="w3-flex w3-container w3-border w3-padding form-col">
                         <h2 class="h3-header w3-center">Collection Information</h2>
                         <dl class="center-just-space">
-                            <dt>Total Cards</dt>
-                            <dd id="statsTotalCards">0</dd>
+                            <dt>Successful Cards</dt>
+                            <dd id="statsSuccessfulCards">0</dd>
+                        </dl>
+                        <dl class="center-just-space">
+                            <dt>Failed Cards</dt>
+                            <dd id="statsFailedCards">0</dd>
+                        </dl>
+                        <dl class="center-just-space">
+                            <dt>Trimmed Cards</dt>
+                            <dd id="statsTrimmedCards">0</dd>
                         </dl>
                         <dl class="center-just-space">
                             <dt>Total at TCGPLow</dt>
@@ -94,6 +101,10 @@
                 
                         </div>
                     </div>
+                </div>
+                <div class="w3-container" style="overflow-x: auto;">
+                    <table class="w3-table w3-bordered zebra-table" id="tableErrorDisplay">
+                    </table>
                 </div>
                 <div class="w3-container" style="overflow-x: auto;">
                     <table class="w3-table w3-bordered zebra-table" id="tableDisplay">

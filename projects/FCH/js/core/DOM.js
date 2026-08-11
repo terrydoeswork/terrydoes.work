@@ -18,7 +18,19 @@ export const DOM = {
         totalCards: document.getElementById('statsTotalCards'),
         totalPrice: document.getElementById('statsTotalPrice'),
         percentageRange: document.getElementById('statsInputRangePercentage'),
-        percentagePrice: document.getElementById('statsPercentagePrice')
+        percentagePrice: document.getElementById('statsPercentagePrice'),
+        failedCards: document.getElementById('statsFailedCards'),
+        trimmedCards: document.getElementById('statsTrimmedCards'),
+        successfulCards: document.getElementById('statsSuccessfulCards'),
     },
-    table: document.getElementById('tableDisplay')
+    search: {
+        input: {
+            cardName: document.getElementById('searchInputCardName'),
+            setCode: document.getElementById('searchInputSetCode'),
+            specialtyMarker: document.getElementById('searchInputSpecialtyMarker')
+        
+        }
+    },
+    table: document.getElementById('tableDisplay'),
+    tableError: document.getElementById('tableErrorDisplay')
 }

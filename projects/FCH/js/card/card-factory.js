@@ -50,6 +50,7 @@ export async function createCard(data, source) {
  * @returns {CARD_FINISH}
  */
 // TODO- MAYBE refactor to parseValueToFinish?
+// TODO- write a better comment
 export function parseFinish(value) {
     switch(value) {
         case 'Foil':
