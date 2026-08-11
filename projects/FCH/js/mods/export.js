@@ -40,7 +40,7 @@ const EXPORTTYPES = [
     }
 ]
 
-let COLLECTION = [];
+let COLLECTION;
 
 
 // exports 
@@ -52,17 +52,18 @@ export function initializeExport() {
 export function resetExports() {
     
     hideExportWindow(true);
-    COLLECTION = [];
+    COLLECTION;
     EXPORTTYPES.forEach(item => {
         item.dom.removeEventListener('click', item.event);
     })
 }
 
 // TODO- Create JSDocs
-export function registerExports(cardArray) { 
+export function registerExports(collection) { 
     // called in main.js
 
-    COLLECTION = cardArray;
+    COLLECTION = collection;
+
     EXPORTTYPES.forEach(item => {
         item.dom.addEventListener('click', item.event);
     })
@@ -105,7 +106,7 @@ function textHandleClick(e) {
 
 function parseText() {
     let j = [];
-    COLLECTION.forEach(card => {
+    COLLECTION.success.forEach(card => {
         j.push(
             `${card.count} ${card.name} ${card.setCode} ${card.collectorNumber}\n`
         );
@@ -125,7 +126,7 @@ function toTCGPlayerList() {
     
     const targetArray = []
 
-    COLLECTION.forEach(card => {
+    COLLECTION.success.forEach(card => {
         targetArray.push({
             'Product ID': card.productID,
             'TCGplayer Id': card.tcgpID,

@@ -2,7 +2,7 @@ import * as ENUM from './enums.js'
 import { Card } from './card/card.js';
 import { convertStringToNumber, moneyRound } from '../../../js/terrydoeslibrary.js';
 import { initializePreview } from './mods/preview.js';
-import { renderCollection, resetTable } from './mods/table.js';
+import { renderCollection, resetErrorTable, resetTable } from './mods/table.js';
 import { DOM } from './core/DOM.js';
 import { initializeStats, resetStats, updateStats } from './mods/stats.js';
 import { initializeExport, registerExports, resetExports } from './mods/export.js';
@@ -37,14 +37,12 @@ async function handleSubmit(event) {
         const file = validateUpload();
         const data = await parseUpload(file);
 
-        let discardPile = [];
+        const collection = await buildCollection(data);
 
-        const cards = await buildCollection(data, discardPile);
+        renderCollection(collection);
+        registerExports(collection);
 
-        renderCollection(cards);
-        registerExports(cards);
-
-        updateStats(cards);
+        updateStats(collection);
 
     } catch (error) {
         console.error(error);
@@ -57,15 +55,23 @@ async function handleSubmit(event) {
 // TODO- Change to Globally Defined Object
 function resetEverything() {
     resetTable();
+    resetErrorTable();
     resetStats();
     resetExports();
 }
 
 // TODO- use promise all mapping
 // TODO- create seperate file for this?
-async function buildCollection(data, discardPile) {
+async function buildCollection(data) {
     
     const cards = [];
+
+    const collection = {
+        failed: [],
+        trimmed: [],
+        success: []
+    }
+
     const source = data.source;
     let iCard = {}
 
@@ -75,26 +81,26 @@ async function buildCollection(data, discardPile) {
             iCard = await createCard(card, source);
                     
             if(shouldDiscard(iCard)) {
-                discardPile.push(iCard);
-                
+                collection.trimmed.push(iCard);
+
             } else if(!iCard.success) {
                 throw new Error(`Card unsuccessful`)
             } else
 
-            cards.push(iCard);
+            collection.success.push(iCard);
+
         } catch(error) {
             iCard.success = false;
             iCard.error.push(error);
-            console.log(iCard);
             console.error('Issue!', error);
             
+            collection.failed.push(iCard);
         } finally {
             console.log(iCard);
-            
         }
 
     }
-    return cards;
+    return collection
 }
 
 

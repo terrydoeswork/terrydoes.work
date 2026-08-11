@@ -68,8 +68,16 @@
                     <div class="w3-flex w3-container w3-border w3-padding form-col">
                         <h2 class="h3-header w3-center">Collection Information</h2>
                         <dl class="center-just-space">
-                            <dt>Total Cards</dt>
-                            <dd id="statsTotalCards">0</dd>
+                            <dt>Successful Cards</dt>
+                            <dd id="statsSuccessfulCards">0</dd>
+                        </dl>
+                        <dl class="center-just-space">
+                            <dt>Failed Cards</dt>
+                            <dd id="statsFailedCards">0</dd>
+                        </dl>
+                        <dl class="center-just-space">
+                            <dt>Trimmed Cards</dt>
+                            <dd id="statsTrimmedCards">0</dd>
                         </dl>
                         <dl class="center-just-space">
                             <dt>Total at TCGPLow</dt>
@@ -94,6 +102,10 @@
                 
                         </div>
                     </div>
+                </div>
+                <div class="w3-container" style="overflow-x: auto;">
+                    <table class="w3-table w3-bordered zebra-table" id="tableErrorDisplay">
+                    </table>
                 </div>
                 <div class="w3-container" style="overflow-x: auto;">
                     <table class="w3-table w3-bordered zebra-table" id="tableDisplay">

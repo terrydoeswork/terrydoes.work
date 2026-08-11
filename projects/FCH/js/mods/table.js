@@ -97,10 +97,17 @@ function renderCardCount(card, cell) {
 }
 
 // TODO- Create JSDocs
-export function renderCollection(cards) {    
-    createTable(TABLE_COLUMNS, cards, DOM.table);
+export function renderCollection(collection) {
+
+    createTable(TABLE_COLUMNS, collection.success, DOM.table);
+    createTable(TABLE_COLUMNS, collection.failed, DOM.tableError);
+    if (collection.failed === []) resetErrorTable();
 }
 
 export function resetTable() {
     DOM.table.replaceChildren();
+}
+
+export function resetErrorTable() {
+    DOM.tableError.replaceChildren();
 }
