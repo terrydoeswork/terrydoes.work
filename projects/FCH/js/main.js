@@ -63,17 +63,17 @@ function resetEverything() {
 
 // TODO- use promise all mapping
 // TODO- create seperate file for this?
-async function buildCollection(data, source) {
+async function buildCollection(data) {
     
     const cards = [];
-    console.log(data);
-    
+
     const collection = {
         failed: [],
         trimmed: [],
         success: []
     }
 
+    const source = data.source;
     let iCard = {}
 
     for (const card of data) {
