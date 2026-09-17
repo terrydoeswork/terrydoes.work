@@ -21,6 +21,7 @@ export const CARD_CONDITION = Object.freeze({
 export const CARD_FINISH = Object.freeze({
     NORMAL: 1,
     FOIL: 2,
+    ETCHED: 3,
 })
 
 /**
@@ -74,5 +75,6 @@ export const RARITY_NAME = Object.freeze({
 export const SOURCE = Object.freeze({
     UNKNOWN: -1,
     TCGPLAYER: 1,
-    MOXFIELD: 2
+    MOXFIELD: 2,
+    MANABOX: 3
 })

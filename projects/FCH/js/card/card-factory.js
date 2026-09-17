@@ -21,17 +21,23 @@ export async function createCard(data, source) {
     data.count && (card.count = Number(data.count));
     data.collectorNumber && (card.collectorNumber = Number(data.collectorNumber));
     data.tcgpID && (card.tcgpID = Number(data.tcgpID));
-    data.source && (card.source = data.source);
+    data.setCode && (card.setCode = data.setCode);
+    card.source = source
+
+    data.scryfallID && (card.scryfallID = data.scryfallID);
     
     if(!data.condition) {
         card.condition = CARD_CONDITION.NEAR_MINT;
         card.error.push(new Error(`condition not found on ${data.name}, assuming NM`))
-
     } else card.condition = data.condition;
 
     try {
-        if(!data.productID) {        
+        if(!data.productID) { 
+            // if(data.scryfallID) {
+            //     searchWithScryfall()
+            // }
             card.productID = await searchForCard(data.name, data.setCode, data.collectorNumber);
+            
         } else card.productID = data.productID;
         await updateCardData(card);
 
@@ -54,11 +60,16 @@ export async function createCard(data, source) {
 export function parseFinish(value) {
     switch(value) {
         case 'Foil':
+        case 'foil':
         case CARD_FINISH.FOIL:
             return CARD_FINISH.FOIL;
         case 'Normal':
+        case 'normal':
         case CARD_FINISH.NORMAL:
             return CARD_FINISH.NORMAL;
+        case 'etched':
+            return CARD_FINISH.ETCHED;
+
         default:
             return null;
     }
@@ -75,26 +86,32 @@ export function parseRarity(value) {
         case CARD_RARITY.COMMON:
         case 'Common':
         case 'C':
+        case 'common':
             return CARD_RARITY.COMMON;
         case CARD_RARITY.UNCOMMON:
         case 'Uncommon':
         case 'U':
+        case'uncommon':
             return CARD_RARITY.UNCOMMON;
         case CARD_RARITY.RARE:
         case 'Rare':
         case 'R':
+        case 'rare':
             return CARD_RARITY.RARE;
         case CARD_RARITY.MYTHIC:
         case 'Mythic':
         case 'M':
+        case 'mythic':
             return CARD_RARITY.MYTHIC;
         case CARD_RARITY.PROMO:
         case 'Promo':
         case 'P':
+        case 'promo':
             return CARD_RARITY.PROMO;
         case CARD_RARITY.LAND:
         case 'Land':
         case 'L':
+        case 'land':
             return CARD_RARITY.LAND;
         case CARD_RARITY.TOKEN:
         case 'Token':
@@ -114,14 +131,19 @@ export function parseRarity(value) {
 export function parseCondition(value) {
     switch(value) {
         case 'Near Mint':
+        case 'near_mint':
             return CARD_CONDITION.NEAR_MINT;
         case 'Lightly Played':
+        case 'lightly_played':
             return CARD_CONDITION.LIGHTLY_PLAYED;
         case 'Moderately Played':
+        case 'moderately_player':
             return CARD_CONDITION.MODERATELY_PLAYED;
         case 'Heavily Played':
+        case 'heavily_played':
             return CARD_CONDITION.HEAVILY_PLAYED;
         case 'Damaged':
+        case 'damaged':
             return CARD_CONDITION.DAMAGED;
         default:
             return null;

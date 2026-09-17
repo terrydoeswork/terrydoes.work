@@ -8,7 +8,7 @@ import { initializeStats, resetStats, updateStats } from './mods/stats.js';
 import { initializeExport, registerExports, resetExports } from './mods/export.js';
 import { createCard } from './card/card-factory.js';
 import { updateCardData } from './api/tcg-tracking.js';
-import { disableSubmitButton } from './mods/import.js';
+import { disableSubmitButton, initializeImport } from './mods/import.js';
 import { parseCSV, parseTXT } from './api/papaparse.js';
 import { parseUpload, validateUpload } from './services/file.js';
 
@@ -21,6 +21,7 @@ function init() {
     initializePreview();
     initializeStats();
     initializeExport();
+    initializeImport();
 
     // event listeners
     DOM.import.window.addEventListener('submit', handleSubmit);
@@ -35,9 +36,9 @@ async function handleSubmit(event) {
         disableSubmitButton(true);
 
         const file = validateUpload();
-        const data = await parseUpload(file);
+        const data = await parseUpload(file, ENUM.SOURCE.MANABOX);
 
-        const collection = await buildCollection(data);
+        const collection = await buildCollection(data, ENUM.SOURCE.MANABOX);
 
         renderCollection(collection);
         registerExports(collection);
@@ -62,17 +63,17 @@ function resetEverything() {
 
 // TODO- use promise all mapping
 // TODO- create seperate file for this?
-async function buildCollection(data) {
+async function buildCollection(data, source) {
     
     const cards = [];
-
+    console.log(data);
+    
     const collection = {
         failed: [],
         trimmed: [],
         success: []
     }
 
-    const source = data.source;
     let iCard = {}
 
     for (const card of data) {
@@ -92,7 +93,7 @@ async function buildCollection(data) {
 
         } catch(error) {
             iCard.success = false;
-            iCard.error.push(error);
+            // iCard.error.push(error);
             console.error('Issue!', error);
             
             collection.failed.push(iCard);

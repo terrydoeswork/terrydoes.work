@@ -30,7 +30,7 @@ export class Card {
         name=undefined, namePrinted=undefined, finish=undefined, condition=undefined, rarity=undefined, setCode=undefined, setName=undefined, count=undefined, collectorNumber=undefined, 
         priceLow=undefined, priceMarket=undefined, 
         productID=undefined, tcgpID=undefined, imageLink=undefined, 
-        success=true, notes=undefined, error=[], source=SOURCE.UNKNOWN) {
+        success=true, notes=undefined, error=[], source=SOURCE.UNKNOWN, manaBoxID=undefined, scryfallID=undefined) {
         // card physical details 
         this.name = name;
         this.namePrinted = namePrinted;
@@ -51,11 +51,16 @@ export class Card {
         this.tcgpID = tcgpID;
         this.imageLink = imageLink;
 
+        // other IDs and what not
+        this.manaBoxID = manaBoxID;
+        this.scryfallID = scryfallID;
+
         // meta data
         this.success = success;
         this.notes = notes;
         this.error = [];
         this.source = source;
+        
     }
 
     updateFromTCGTracking(data) {
@@ -88,6 +93,8 @@ export class Card {
     get isUnderRare() {
         return this.rarity < CARD_RARITY.RARE;
     }
+    
+    
 
     get conditionName() {
         return CONDITION_NAME[this.condition];
