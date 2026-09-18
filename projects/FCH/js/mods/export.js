@@ -108,11 +108,11 @@ function parseText() {
     let j = [];
     COLLECTION.success.forEach(card => {
         j.push(
-            `${card.count} ${card.name} ${card.setCode} ${card.collectorNumber}\n`
+            `${card.count} ${card.name} ${card.setCode} ${card.collectorNumber}`
         );
     })
 
-    return j;
+    return j.join(`\n`);
 }
 
 // TCGPlayer List
