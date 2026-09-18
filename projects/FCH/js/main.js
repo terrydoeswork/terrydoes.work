@@ -12,7 +12,8 @@ import { disableSubmitButton, initializeImport } from './mods/import.js';
 import { parseCSV, parseTXT } from './api/papaparse.js';
 import { parseUpload, validateUpload } from './services/file.js';
 
-const TMP_SOURCE = ENUM.SOURCE.MANABOX
+//! TODO add source selecter in website
+const TMP_SOURCE = ENUM.SOURCE.TCGPLAYER
 
 init();
 
@@ -35,8 +36,6 @@ async function handleSubmit(event) {
     try {
         resetEverything();
         disableSubmitButton(true);
-
-        // Change!!!
 
         const file = validateUpload();
         const data = await parseUpload(file, TMP_SOURCE);

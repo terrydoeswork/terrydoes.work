@@ -31,13 +31,21 @@ export function validateUpload() {
 export async function parseUpload(file, source) {
     switch(source) {
         case SOURCE.TCGPLAYER:
+            console.log('source = TCGPlayer');
             return await parseTCGP(file);
+            
         case SOURCE.MOXFIELD:
+            
+            console.log('source = moxfield');
             return await parseMoxfield(file);
         case SOURCE.MANABOX:
+            
+            console.log('source = Manabox');
             return await parseManaBox(file);
         case SOURCE.UNKNOWN:
         case defualt:
+            
+            console.log('source = unknown, checking from file extension');
             if (file.name.toLowerCase().endsWith('.txt')) {
                 return await parseMoxfield(file);
             }
