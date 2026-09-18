@@ -3,6 +3,8 @@ import { createTable } from '../../../../js/terrydoeslibrary.js';
 import { DOM } from '../core/DOM.js';
 import { FINISH_EMOJI } from '../enums.js';
 
+const SUS_PERCENT = 80;
+
 // TODO- Create JSDocs
 export const TABLE_COLUMNS = [  
     {
@@ -26,6 +28,11 @@ export const TABLE_COLUMNS = [
         render: renderCardLowPrice
     },
     {
+        header: 'Market Price',
+        headerClasses: ['w3-center'],
+        render: renderCardMarket
+    },
+    {
         header: 'Count',
         headerClasses: ['w3-center'],
         render: renderCardCount
@@ -40,6 +47,10 @@ function renderCardName(card, cell) {
 
     cell.appendChild(span);
     
+    if (!card.success || !card.imageLink) {
+        return;
+    }
+
     cell.addEventListener('mouseenter', () => {
         showPreview(card.imageLink);
     });
@@ -78,14 +89,10 @@ function renderCardCondition(card, cell) {
 function renderCardLowPrice(card, cell) {
     const span = document.createElement('span');
 
-    if(card.success) {
+    if(card.priceLow && card.success) {
         span.textContent = `$${card.priceLow}`;
     } else {
         span.textContent = `$???`
-    }
-
-    if(card.isSus) {
-        span.classList.add('w3-text-amber')
     }
 
     cell.classList.add('w3-right-align');
@@ -100,10 +107,24 @@ function renderCardCount(card, cell) {
     cell.appendChild(span);
 }
 
+function renderCardMarket(card, cell) {
+    const span = document.createElement('span');
+    
+    if(card.priceMarket) {
+        span.textContent = `$${card.priceMarket}`;
+    } else {
+        span.textContent = `$???`
+    }
+
+    cell.classList.add('w3-right-align');
+    cell.appendChild(span);
+}
+
 // TODO- Create JSDocs
 export function renderCollection(collection) {
 
     createTable(TABLE_COLUMNS, collection.success, DOM.table);
+
     createTable(TABLE_COLUMNS, collection.failed, DOM.tableError);
     if (collection.failed == []) resetErrorTable();
 }

@@ -1,5 +1,5 @@
 import { isWithinPercentage } from '../../../../js/terrydoeslibrary.js';
-import { CARD_CONDITION, CARD_FINISH, CARD_RARITY, CONDITION_NAME, FINISH_EMOJI, FINISH_NAME, RARITY_NAME, SOURCE} from '../enums.js';
+import { CARD_CONDITION, CARD_FINISH, CARD_RARITY, CONDITION_NAME, FINISH_EMOJI, FINISH_NAME, RARITY_NAME } from '../enums.js';
 
 // TODO- Create better JSDocs
 export class Card {
@@ -7,30 +7,39 @@ export class Card {
     /**
      * Create a Card Object
      * @param {string} name Name including (foil etched) and such
-     * @param {string} namePrinted Name as printed on the card 
-     * @param {CARD_FINISH} finish nonfoil, foil 
+     * @param {CARD_FINISH} finish nonfoil, foil, rare cases etched
      * @param {CARD_CONDITION} condition NM, LP, MP, HP, DMG
-     * @param {CARD_RARITY} rarity Token, Rare, Promo etc 
+     * @param {number} count number of identical cards this object repersents
+     * 
      * @param {string} setCode 3-4 letter code for set 
      * @param {string} setName name of set. Usually pretty long 
-     * @param {number} count number of identical cards this object repersents
+     * 
+     * @param {string} namePrinted Name as printed on the card
+     * @param {CARD_RARITY} rarity Token, Rare, Promo etc 
      * @param {number} collectorNumber 1-4 digit number
+     * 
      * @param {number} priceLow number of pennies. Divide by 100 to get in USD
      * @param {number} priceMarket number of pennies. Divide by 100 to get in USD
+     * @param {number} priceDamaged price of a damaged copy AKA worse case scenario
+     * @param {number} priceMint price of a NM copy AKA best case scenario
+     * 
      * @param {number} productID internal number of card
      * @param {number} tcgpID inernal number of card including condition and finish
+     * @param {string} scryfallID 
+     * @param {number} manaBoxID
+     * 
      * @param {string} imageLink link to card image file 
-     * @param {boolean} success default=true, set to false if issue 
-     * @param {string} notes pretty useless, might delete
-     * @param {Error[]} error collection of errors when constructing card 
-     * @param {SOURCE} source where the card data is parsed from
+     * 
+     * @param {boolean} success default=true, set to false if issue
+     * @param {Error[]} error collection of errors when constructing card
      */
     
     constructor(
-        name=undefined, namePrinted=undefined, finish=undefined, condition=undefined, rarity=undefined, setCode=undefined, setName=undefined, count=undefined, collectorNumber=undefined, 
-        priceLow=undefined, priceMarket=undefined, 
-        productID=undefined, tcgpID=undefined, imageLink=undefined, 
-        success=true, notes=undefined, error=[], source=SOURCE.UNKNOWN, manaBoxID=undefined, scryfallID=undefined) {
+        name=undefined, namePrinted=undefined, finish=CARD_FINISH.UNKNOWN, condition=CARD_CONDITION.UNKNOWN, rarity=undefined, setCode=undefined, setName=undefined, count=undefined, collectorNumber=undefined, 
+        priceLow=undefined, priceMarket=undefined, priceDamaged=undefined, priceMint=undefined,
+        productID=undefined, tcgpID=undefined, manaBoxID=undefined, scryfallID=undefined, imageLink=undefined, 
+        success=true, error=[]) {
+
         // card physical details 
         this.name = name;
         this.namePrinted = namePrinted;
@@ -45,6 +54,21 @@ export class Card {
         // pricing
         this.priceLow = priceLow;
         this.priceMarket = priceMarket;
+        
+        this.priceRange = {
+            nonfoil: {
+                low: priceLow,
+                market: priceMarket,
+                damaged: priceDamaged,
+                mint: priceMint
+            },
+            foil: {
+                low: priceLow,
+                market: priceMarket,
+                damaged: priceDamaged,
+                mint: priceMint
+            }
+        }
 
         // tcgplayer / tcgtacking data
         this.productID = productID;
@@ -57,9 +81,7 @@ export class Card {
 
         // meta data
         this.success = success;
-        this.notes = notes;
         this.error = [];
-        this.source = source;
         
     }
 
@@ -81,9 +103,10 @@ export class Card {
     }
 
     /**
+     * @param {number} percent 1-100- How close is Lowprice to marketprice?
      * @returns {boolean}
      */
-    get isSus() {
+    isSus(percent) {
         return !isWithinPercentage(this.priceLow, this.priceMarket, 50)
     }
 
@@ -94,8 +117,6 @@ export class Card {
         return this.rarity < CARD_RARITY.RARE;
     }
     
-    
-
     get conditionName() {
         return CONDITION_NAME[this.condition];
     }

@@ -24,15 +24,40 @@ export async function updateCardData(card) {
     return card;
 }
 
+export async function findCardFromTCGP(productID, condition, finish) {
+
+    const data = await fetchLink(getProductLink(productID));
+    
+    let sku = locateSku(data, card.condition, card.finish);
+    
+    if (!isSkuValid(sku)) {
+        throw new Error(`Could not locate sku on card. ${sku}`)
+    }
+
+    return {
+        priceLow: Number(sku)
+    }
+
+}
+
 // TODO- Create JSDocs
 // TODO- Write this more elegantly
-export async function searchForCard(cardName, setCode, collectorNumber) {
+export async function searchForCard(cardName, setCode, collectorNumber, scryfallID=undefined) {
+
     const searchData = await fetchLink(URL + GAME.MTG + '/search?q=' + setCode);
+    
     const set = searchData.sets.find(set => 
         set.abbreviation === setCode
     )
-    const setID = set.id;
 
+    if (!set?.id) {
+        throw new Error(
+            `Set not found: ${setCode} \n` +
+            `Details:`, set
+        )
+    }
+    
+    const setID = set.id;
     const setData = await fetchLink(URL + GAME.MTG + '/sets/' + setID + '/cards');
 
     const card = setData.products.find(card =>
@@ -41,10 +66,9 @@ export async function searchForCard(cardName, setCode, collectorNumber) {
         card.number == collectorNumber
     )
     
-    
     if (card?.id) {
         return Number(card.id);
-
+        
     } else throw new Error(
         `Card not found: ${cardName} \n` +
         `Details:`, card
@@ -78,24 +102,4 @@ function isSkuValid(sku) {
 
 function getProductLink(productID) {
     return URL + '/products/' + productID;
-}
-
-/**
- * 
- * @param {string} cardName Name of card searching for
- * @param {string} setAbbr 3-4 Letter string
- * @param {number} setCode 6-10 digit code used by TCGPlayer and OpenAPI
- * @returns {object} 
- */
-export async function fetchCardData(cardName, setAbbr=null, setCode=null) {
-    
-}
-
-/**
- * 
- * @param {string} set can be abbr (FDN) or full name (Foundations)
- * @param {boolean} isSupplemental 
- */
-function fetchSetData(set, isSupplemental=false) {
-
 }

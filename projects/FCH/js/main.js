@@ -12,6 +12,7 @@ import { disableSubmitButton, initializeImport } from './mods/import.js';
 import { parseCSV, parseTXT } from './api/papaparse.js';
 import { parseUpload, validateUpload } from './services/file.js';
 
+const TMP_SOURCE = ENUM.SOURCE.MANABOX
 
 init();
 
@@ -35,10 +36,11 @@ async function handleSubmit(event) {
         resetEverything();
         disableSubmitButton(true);
 
-        const file = validateUpload();
-        const data = await parseUpload(file, ENUM.SOURCE.MANABOX);
+        // Change!!!
 
-        const collection = await buildCollection(data, ENUM.SOURCE.MANABOX);
+        const file = validateUpload();
+        const data = await parseUpload(file, TMP_SOURCE);
+        const collection = await buildCollection(data, TMP_SOURCE);
 
         renderCollection(collection);
         registerExports(collection);
@@ -63,9 +65,7 @@ function resetEverything() {
 
 // TODO- use promise all mapping
 // TODO- create seperate file for this?
-async function buildCollection(data) {
-    
-    const cards = [];
+async function buildCollection(data, source) {
 
     const collection = {
         failed: [],
@@ -73,29 +73,29 @@ async function buildCollection(data) {
         success: []
     }
 
-    const source = data.source;
     let iCard = {}
 
     for (const card of data) {
 
         try {
+
             iCard = await createCard(card, source);
-                    
+
+            if(!iCard.success) {
+                throw new Error(`Card unsuccessful`)
+            }
+
             if(shouldDiscard(iCard)) {
                 collection.trimmed.push(iCard);
-
-            } else if(!iCard.success) {
-                throw new Error(`Card unsuccessful`)
-
-            } else
-
+                return;
+            } 
+            
             collection.success.push(iCard);
 
         } catch(error) {
             iCard.success = false;
-            // iCard.error.push(error);
             console.error('Issue!', error);
-            
+
             collection.failed.push(iCard);
         } finally {
             console.log(iCard);

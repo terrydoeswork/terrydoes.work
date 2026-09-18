@@ -9,10 +9,73 @@ import { searchForCard, updateCardData } from '../api/tcg-tracking.js';
  * @returns {Card}
  */
 // TODO- Find the better way to make this
-export async function createCard(data, source) {
-    
+export async function createCard(data, source, trustFinish=true, trustCondition=true) {
+
     let card = new Card();
+
+    attemptFill(data, card);
+
+    if(!trustCondition) {
+        card.condition = CARD_CONDITION.UNKNOWN;
+    } else card.condition = data.condition;
+
+    if(!trustFinish) {
+        card.finish = CARD_FINISH.UNKNOWN;
+    } else card.finish = data.finish;
     
+    try {
+        switch(source) {
+            case SOURCE.TCGPLAYER:
+                await buildFromTCGPlayer(data, card);
+                break;
+            case SOURCE.MOXFIELD:
+                await buildFromMoxfield(data, card);
+                break;
+            case SOURCE.MANABOX:
+                await buildFromManabox(data, card);
+                break;
+            case SOURCE.UNKNOWN:
+            default:
+                await buildFromUnknown(data, card);
+                break;
+        }
+    } catch(error) {
+        card.success = false;
+        card.error.push(error)
+        
+    } finally {
+        return card;
+    }
+}
+
+async function buildFromTCGPlayer(data, card) {
+
+    card.productID = data.productID;
+
+    await updateCardData(card);
+
+    return card;
+}
+
+async function buildFromMoxfield(data, card) {
+    
+    card.productID = await searchForCard(data.name, data.setCode, data.collectorNumber);
+    
+    await updateCardData(card);
+
+    return card
+}
+
+async function buildFromManabox(data, card) {
+    
+    card.productID = await searchForCard(data.name, data.setCode, data.collectorNumber);
+    
+    await updateCardData(card);
+
+    return card
+}
+
+function attemptFill(data, card) {
     data.name && (card.name = data.name);
     data.namePrinted && (card.namePrinted = data.namePrinted);
     data.finish && (card.finish = parseFinish(data.finish));
@@ -22,32 +85,8 @@ export async function createCard(data, source) {
     data.collectorNumber && (card.collectorNumber = Number(data.collectorNumber));
     data.tcgpID && (card.tcgpID = Number(data.tcgpID));
     data.setCode && (card.setCode = data.setCode);
-    card.source = source
-
     data.scryfallID && (card.scryfallID = data.scryfallID);
-    
-    if(!data.condition) {
-        card.condition = CARD_CONDITION.NEAR_MINT;
-        card.error.push(new Error(`condition not found on ${data.name}, assuming NM`))
-    } else card.condition = data.condition;
 
-    try {
-        if(!data.productID) { 
-            // if(data.scryfallID) {
-            //     searchWithScryfall()
-            // }
-            card.productID = await searchForCard(data.name, data.setCode, data.collectorNumber);
-            
-        } else card.productID = data.productID;
-        await updateCardData(card);
-
-    } catch(error) {
-        card.success = false;
-        card.error.push(error)
-
-    } finally {
-        return card;
-    }
 }
 
 /**

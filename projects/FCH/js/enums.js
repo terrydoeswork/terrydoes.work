@@ -6,6 +6,7 @@
  * @enum {number}
  */
 export const CARD_CONDITION = Object.freeze({
+    UNKNOWN: -1,
     NEAR_MINT: 1,
     LIGHTLY_PLAYED: 2,
     MODERATELY_PLAYED: 3,
@@ -19,6 +20,7 @@ export const CARD_CONDITION = Object.freeze({
  * @enum {number}
  */
 export const CARD_FINISH = Object.freeze({
+    UNKNOWN: -1,
     NORMAL: 1,
     FOIL: 2,
     ETCHED: 3,
